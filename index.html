@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Connexion - Épicuvin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Roboto&display=swap" rel="stylesheet">
+  <link rel="apple-touch-icon" href="Images/Icon.webp" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #7B1E1E, #4a0f0f);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0 10px;
+    }
+
+    .login-box {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+      width: 40%;
+      max-width: 500px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+    }
+
+    .login-box h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      margin-bottom: 25px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      background-color: #fff;
+      color: #333;
+      transition: all 0.2s ease;
+    }
+
+    input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #9e2a2a;
+    }
+
+    button {
+      width: 100%;
+      background: #9e2a2a;
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background: #b33a3a;
+      transform: translateY(-2px);
+    }
+
+    .error {
+      background: #b33a3a;
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 6px;
+      font-weight: 600;
+      display: none;
+    }
+
+    /* 🔍 Tablette (481px à 1024px) */
+    @media (max-width: 1024px) {
+      .login-box {
+        width: 75%;
+        padding: 40px 30px;
+      }
+
+      .login-box h2 {
+        font-size: 26px;
+      }
+
+      input,
+      button {
+        font-size: 17px;
+      }
+    }
+
+    /* 📱 Mobile (480px et moins) */
+    @media (max-width: 480px) {
+      .login-box {
+        width: 95%;
+        padding: 40px 20px;
+      }
+
+      .login-box h2 {
+        font-size: 22px;
+      }
+
+      input,
+      button {
+        font-size: 18px;
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Connexion Épicuvin</h2>
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Nom d'utilisateur" required autofocus />
+      <input type="password" id="password" placeholder="Mot de passe" required />
+      <button type="submit">Se connecter</button>
+    </form>
+    <div id="errorMsg" class="error"></div>
+  </div>
+
+<script>
+    const loginForm = document.getElementById('login-form');
+    const errorMsg = document.getElementById('errorMsg');
+    
+    // Vos utilisateurs sont bien configurés ici
+    const users = [
+      { username: 'Antoine', password: 'Wissant62' },
+      { username: 'Marchal', password: 'Wissant' }
+    ];
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // La correction est ici : .getElementById au lieu de .gtElementById
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      
+      const foundUser = users.find(user => user.username === username && user.password === password);
+      
+      if (foundUser) {
+        sessionStorage.setItem('loggedInUser', foundUser.username);
+        window.location.href = 'cave.html';
+      } else {
+        errorMsg.textContent = 'Nom d’utilisateur ou mot de passe incorrect.';
+        errorMsg.style.display = 'block';
+      }
+    });
+
+    // Cette partie est correcte et redirige si déjà connecté
+    if (sessionStorage.getItem('loggedInUser')) {
+      window.location.href = 'cave.html';
+    }
+</script>
+</body>
+</html>
