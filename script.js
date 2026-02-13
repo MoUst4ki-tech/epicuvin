@@ -180,8 +180,8 @@ function renderTable() {
       <td>${wine.region}</td>
       <td>${wine.commentaire || ""}</td>
       <td>
-        <button class="edit-btn">✏️</button>
-        <button class="delete-btn">🗑️</button>
+        <button class="edit-btn">Modifier</button>
+        <button class="delete-btn">Suppr.</button>
       </td>
     `;
     
