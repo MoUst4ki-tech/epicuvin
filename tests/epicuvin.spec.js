@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 test('Le robot peut se connecter et ouvrir la modale d\'ajout de vin', async ({ page }) => {
   // 1. Le robot va sur la page d'accueil (index.html)
   // (Le chemin dépendra de comment Playwright lance votre site, on utilise un chemin relatif)
-  await page.goto('/index.html');
+ await page.goto('http://localhost:3000/index.html');
 
   // 2. Le robot remplit le formulaire avec SES identifiants
   await page.fill('#email', 'robot@epicuvin.test');
