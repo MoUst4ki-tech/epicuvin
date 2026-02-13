@@ -3,139 +3,170 @@
 <head>
   <meta charset="UTF-8" />
   <title>Connexion - Épicuvin</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
   <link rel="apple-touch-icon" href="Images/Icon.webp" />
+  
   <style>
+    /* Application de la DA Premium Sommelier */
     * {
       box-sizing: border-box;
     }
 
     body {
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(to right, #7B1E1E, #4a0f0f);
-      color: white;
+      font-family: 'Montserrat', sans-serif;
+      /* Le même fond radial "lumière tamisée" que la cave */
+      background-color: #140F0F;
+      background: radial-gradient(circle at 50% 0%, #2A1A1A 0%, #140F0F 70%);
+      color: #EAE0D5;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
-      padding: 0 10px;
+      padding: 0 20px;
+      -webkit-font-smoothing: antialiased;
     }
 
     .login-box {
-      background: rgba(0, 0, 0, 0.4);
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
-      width: 40%;
-      max-width: 500px;
+      background: rgba(26, 18, 18, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 50px 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(197, 160, 89, 0.2); /* Bordure or très fine */
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+      width: 100%;
+      max-width: 450px;
       text-align: center;
-      backdrop-filter: blur(8px);
       transition: all 0.3s ease;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .login-box h2 {
       font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      margin-bottom: 25px;
+      font-size: 2.2rem;
+      color: #C5A059; /* Or vieilli */
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin: 0 0 35px 0;
     }
 
     input {
       width: 100%;
-      padding: 14px;
-      margin: 12px 0;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      background-color: #fff;
-      color: #333;
-      transition: all 0.2s ease;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(197, 160, 89, 0.2);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-family: 'Montserrat', sans-serif;
+      background-color: rgba(0, 0, 0, 0.4);
+      color: #EAE0D5;
+      transition: all 0.3s ease;
+    }
+
+    input::placeholder {
+      color: #887C70;
     }
 
     input:focus {
       outline: none;
-      box-shadow: 0 0 0 2px #9e2a2a;
+      border-color: #8B1C31;
+      background-color: rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 15px rgba(139, 28, 49, 0.2);
     }
 
     button {
       width: 100%;
-      background: #9e2a2a;
-      color: white;
-      padding: 14px;
+      background: linear-gradient(135deg, #8B1C31 0%, #5A1220 100%);
+      color: #EAE0D5;
+      padding: 16px;
       border: none;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 18px;
+      border-radius: 6px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(139, 28, 49, 0.2);
+      margin-top: 10px;
     }
 
     button:hover {
-      background: #b33a3a;
       transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(139, 28, 49, 0.4);
+      background: linear-gradient(135deg, #A2223A 0%, #6E1527 100%);
+    }
+
+    .toggle-container {
+      margin-top: 25px;
+    }
+
+    #toggle-auth {
+      color: #A89B8C;
+      font-size: 0.85rem;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: color 0.3s;
+    }
+
+    #toggle-auth:hover {
+      color: #C5A059;
     }
 
     .error {
-      background: #b33a3a;
-      padding: 10px;
-      margin-top: 15px;
+      background: rgba(139, 28, 49, 0.1);
+      color: #EAE0D5;
+      border: 1px solid #8B1C31;
+      padding: 12px;
+      margin-top: 20px;
       border-radius: 6px;
-      font-weight: 600;
+      font-weight: 400;
+      font-size: 0.9rem;
       display: none;
     }
 
-    /* 🔍 Tablette (481px à 1024px) */
-    @media (max-width: 1024px) {
-      .login-box {
-        width: 75%;
-        padding: 40px 30px;
-      }
-
-      .login-box h2 {
-        font-size: 26px;
-      }
-
-      input,
-      button {
-        font-size: 17px;
-      }
-    }
-
-    /* 📱 Mobile (480px et moins) */
+    /* 📱 Mobile Responsive */
     @media (max-width: 480px) {
       .login-box {
-        width: 95%;
-        padding: 40px 20px;
+        padding: 40px 25px;
+        border: none;
+        box-shadow: none;
+        background: transparent;
       }
-
       .login-box h2 {
-        font-size: 22px;
-      }
-
-      input,
-      button {
-        font-size: 18px;
-        padding: 16px;
+        font-size: 1.8rem;
       }
     }
   </style>
 </head>
 <body>
   <div class="login-box">
-  <h2 id="form-title">Connexion Épicuvin</h2>
-  <form id="auth-form">
-    <input type="email" id="email" placeholder="Email" required autofocus />
-    <input type="password" id="password" placeholder="Mot de passe" required />
-    <button type="submit" id="submit-btn">Se connecter</button>
-  </form>
-  <p style="margin-top: 15px;">
-    <a href="#" id="toggle-auth" style="color: white; font-size: 14px;">Pas de compte ? Créer un compte</a>
-  </p>
-  <div id="errorMsg" class="error"></div>
-</div>
+    <h2 id="form-title">Épicuvin</h2>
+    <form id="auth-form">
+      <input type="email" id="email" placeholder="Adresse e-mail" required autofocus />
+      <input type="password" id="password" placeholder="Mot de passe" required />
+      <button type="submit" id="submit-btn">Se connecter</button>
+    </form>
+    
+    <div class="toggle-container">
+      <a href="#" id="toggle-auth">Créer un compte privé</a>
+    </div>
+    
+    <div id="errorMsg" class="error"></div>
+  </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -145,7 +176,6 @@
     createUserWithEmailAndPassword 
   } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-  // Utilisez votre config existante
   const firebaseConfig = {
     apiKey: "AIzaSyAZQqueroo-GNWMVENm3c2-j0T8d7dpsjs",
     authDomain: "epicuvin.firebaseapp.com",
@@ -167,13 +197,13 @@
 
   let isLogin = true;
 
-  // Basculer entre Connexion et Inscription
   toggleBtn.addEventListener('click', (e) => {
     e.preventDefault();
     isLogin = !isLogin;
-    formTitle.textContent = isLogin ? "Connexion Épicuvin" : "Créer un compte";
-    submitBtn.textContent = isLogin ? "Se connecter" : "S'inscrire";
-    toggleBtn.textContent = isLogin ? "Pas de compte ? Créer un compte" : "Déjà un compte ? Se connecter";
+    
+    // Textes adaptés au style luxe
+    submitBtn.textContent = isLogin ? "Se connecter" : "Ouvrir ma cave";
+    toggleBtn.textContent = isLogin ? "Créer un compte privé" : "J'ai déjà une cave (Connexion)";
   });
 
   authForm.addEventListener('submit', async (e) => {
@@ -187,10 +217,15 @@
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
       }
-      // Succès : Firebase gère la session, on redirige
       window.location.href = 'cave.html';
     } catch (error) {
-      errorMsg.textContent = "Erreur : " + error.message;
+      // Nettoyage des erreurs Firebase pour un affichage plus propre
+      let msg = "Une erreur est survenue.";
+      if(error.code === 'auth/invalid-credential') msg = "Identifiants incorrects.";
+      if(error.code === 'auth/email-already-in-use') msg = "Cette adresse possède déjà une cave.";
+      if(error.code === 'auth/weak-password') msg = "Le mot de passe doit faire au moins 6 caractères.";
+      
+      errorMsg.textContent = msg;
       errorMsg.style.display = 'block';
     }
   });
