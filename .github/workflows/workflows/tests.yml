@@ -1,31 +1,53 @@
-name: Tests Automatiques du Sommelier
+name: Tests et Déploiement du Sommelier
 
 on:
   push:
     branches: [ main, master ]
 
+# Permissions obligatoires pour que le robot ait le droit de publier sur votre site
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
+  # === MISSION 1 : LE TESTEUR ===
   tester-application:
     timeout-minutes: 10
     runs-on: ubuntu-latest
-
     steps:
     - name: 📥 Récupérer le code
       uses: actions/checkout@v4
-
     - name: ⚙️ Installer NodeJS
       uses: actions/setup-node@v4
       with:
         node-version: 18
-
     - name: 📦 Installer les dépendances NPM
       run: npm install
-
     - name: 🌐 Installer Serve
       run: npm install -g serve
-
     - name: 🤖 Installer les navigateurs Playwright
       run: npx playwright install --with-deps
-
     - name: ✅ Lancer les tests Playwright
       run: npx playwright test
+
+  # === MISSION 2 : LE DÉPLOIEMENT ===
+  deployer-site:
+    # LA LIGNE MAGIQUE : Ce job attend que "tester-application" soit validé !
+    needs: tester-application 
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 📥 Récupérer le code validé
+        uses: actions/checkout@v4
+      - name: ⚙️ Configurer GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: 📦 Préparer les fichiers (Toute la racine)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - name: 🚀 Publier le site en ligne
+        id: deployment
+        uses: actions/deploy-pages@v4
