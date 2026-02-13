@@ -10,7 +10,7 @@ test.describe('Test complet du Sommelier (Cycle de vie d\'un vin)', () => {
     await page.goto('http://127.0.0.1:3000/index.html');
     await page.fill('#email', 'robot@epicuvin.test');
     await page.fill('#password', 'RobotTest2026!');
-    await page.click('#bouton-imaginaire');
+    await page.click('#submit-btn');
 
     // Vérification : On est bien dans la cave
     await expect(page).toHaveURL(/.*cave/);
