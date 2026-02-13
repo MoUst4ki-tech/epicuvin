@@ -31,10 +31,27 @@ const db = getFirestore(app);
 const winesCollection = collection(db, "vins");
 
 // --- 4. VÉRIFICATION UTILISATEUR ---
-const loggedInUser = sessionStorage.getItem("loggedInUser");
-if (!loggedInUser) {
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+const auth = getAuth(app);
+let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user.email; // On utilise l'email comme identifiant de propriété
+    initRealTimeListener();
+  } else {
     window.location.href = "index.html";
-}
+  }
+});
+
+// Dans initRealTimeListener, remplacez loggedInUser par currentUser
+const q = query(winesCollection, where("proprietaire", "==", currentUser));
+
+// Pour la déconnexion
+document.getElementById("logout-btn").addEventListener("click", () => {
+  signOut(auth);
+});
 
 // --- VARIABLES GLOBALES ---
 const form = document.getElementById("wine-form");

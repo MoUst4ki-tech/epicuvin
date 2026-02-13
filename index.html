@@ -125,47 +125,75 @@
 </head>
 <body>
   <div class="login-box">
-    <h2>Connexion Épicuvin</h2>
-    <form id="login-form">
-      <input type="text" id="username" placeholder="Nom d'utilisateur" required autofocus />
-      <input type="password" id="password" placeholder="Mot de passe" required />
-      <button type="submit">Se connecter</button>
-    </form>
-    <div id="errorMsg" class="error"></div>
-  </div>
+  <h2 id="form-title">Connexion Épicuvin</h2>
+  <form id="auth-form">
+    <input type="email" id="email" placeholder="Email" required autofocus />
+    <input type="password" id="password" placeholder="Mot de passe" required />
+    <button type="submit" id="submit-btn">Se connecter</button>
+  </form>
+  <p style="margin-top: 15px;">
+    <a href="#" id="toggle-auth" style="color: white; font-size: 14px;">Pas de compte ? Créer un compte</a>
+  </p>
+  <div id="errorMsg" class="error"></div>
+</div>
 
-<script>
-    const loginForm = document.getElementById('login-form');
-    const errorMsg = document.getElementById('errorMsg');
-    
-    // Vos utilisateurs sont bien configurés ici
-    const users = [
-      { username: 'Antoine', password: 'Wissant62' },
-      { username: 'Marchal', password: 'Wissant' }
-    ];
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { 
+    getAuth, 
+    signInWithEmailAndPassword, 
+    createUserWithEmailAndPassword 
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      // La correction est ici : .getElementById au lieu de .gtElementById
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value;
-      
-      const foundUser = users.find(user => user.username === username && user.password === password);
-      
-      if (foundUser) {
-        sessionStorage.setItem('loggedInUser', foundUser.username);
-        window.location.href = 'cave.html';
+  // Utilisez votre config existante
+  const firebaseConfig = {
+    apiKey: "AIzaSyAZQqueroo-GNWMVENm3c2-j0T8d7dpsjs",
+    authDomain: "epicuvin.firebaseapp.com",
+    projectId: "epicuvin",
+    storageBucket: "epicuvin.firebasestorage.app",
+    messagingSenderId: "57351192825",
+    appId: "1:57351192825:web:c3763a02b2cae468bd2228",
+    measurementId: "G-LN4MVN4DED"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const authForm = document.getElementById('auth-form');
+  const toggleBtn = document.getElementById('toggle-auth');
+  const formTitle = document.getElementById('form-title');
+  const submitBtn = document.getElementById('submit-btn');
+  const errorMsg = document.getElementById('errorMsg');
+
+  let isLogin = true;
+
+  // Basculer entre Connexion et Inscription
+  toggleBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    isLogin = !isLogin;
+    formTitle.textContent = isLogin ? "Connexion Épicuvin" : "Créer un compte";
+    submitBtn.textContent = isLogin ? "Se connecter" : "S'inscrire";
+    toggleBtn.textContent = isLogin ? "Pas de compte ? Créer un compte" : "Déjà un compte ? Se connecter";
+  });
+
+  authForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+      if (isLogin) {
+        await signInWithEmailAndPassword(auth, email, password);
       } else {
-        errorMsg.textContent = 'Nom d’utilisateur ou mot de passe incorrect.';
-        errorMsg.style.display = 'block';
+        await createUserWithEmailAndPassword(auth, email, password);
       }
-    });
-
-    // Cette partie est correcte et redirige si déjà connecté
-    if (sessionStorage.getItem('loggedInUser')) {
+      // Succès : Firebase gère la session, on redirige
       window.location.href = 'cave.html';
+    } catch (error) {
+      errorMsg.textContent = "Erreur : " + error.message;
+      errorMsg.style.display = 'block';
     }
+  });
 </script>
 </body>
 </html>
