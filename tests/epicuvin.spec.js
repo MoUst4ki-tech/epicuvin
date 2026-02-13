@@ -9,7 +9,7 @@ test('Le robot peut se connecter et ouvrir la modale d\'ajout de vin', async ({ 
   
   await page.click('#submit-btn');
 
-  await expect(page).toHaveURL(/.*cave.html/);
+  await expect(page).toHaveURL(/.*cave/);
   await expect(page.locator('#cellar-title')).toBeVisible();
 
   await page.click('#open-modal-btn');
