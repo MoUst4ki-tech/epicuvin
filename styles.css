@@ -1,199 +1,239 @@
-/* --- IMPORT DE LA POLICE INTER (Très moderne) --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+/* --- PALETTE SOMMELIER PREMIUM ---
+   Fond principal : #140F0F (Noir très légèrement pourpre/chaud)
+   Conteneurs : #221818 (Gris de chauffe bordeaux)
+   Texte principal : #EAE0D5 (Champagne / Crème)
+   Titres / Or : #C5A059 (Or vieilli)
+   Accents : #8B1C31 (Rouge Rubis / Grand Cru)
+----------------------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap');
 
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: #FAFAFA; /* Gris extrêmement clair, très propre */
-    color: #111827; /* Gris anthracite presque noir, plus doux que le noir pur */
+    font-family: 'Montserrat', sans-serif;
+    background-color: #140F0F;
+    /* Un léger dégradé radial pour l'effet "lumière tamisée sur une table" */
+    background: radial-gradient(circle at 50% 0%, #2A1A1A 0%, #140F0F 70%);
+    color: #EAE0D5;
     margin: 0;
-    -webkit-font-smoothing: antialiased; /* Rend la police plus fine sur Mac/iOS */
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* On cache l'ancien overlay s'il est encore dans le HTML */
+/* Cache l'overlay de l'ancien design */
 .background-overlay { display: none; }
 
-/* HEADER MINIMALISTE */
+/* HEADER - Feutré et élégant */
 header {
-    background: #FFFFFF;
-    padding: 40px 20px 30px;
+    padding: 60px 20px 40px;
     text-align: center;
-    border-bottom: 1px solid #E5E7EB;
     position: relative;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.15); /* Ligne or très fine */
 }
 
 header h1 {
+    font-family: 'Playfair Display', serif;
     font-weight: 600;
-    font-size: 1.8rem;
-    letter-spacing: -0.02em;
+    font-size: 2.5rem;
+    color: #C5A059; /* Or vieilli */
+    letter-spacing: 4px;
+    text-transform: uppercase;
     margin: 0;
-    color: #111827;
+    text-shadow: 0 2px 10px rgba(197, 160, 89, 0.2);
 }
 
 header p {
-    color: #6B7280;
-    font-size: 0.95rem;
-    font-weight: 400;
-    margin-top: 8px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: #A89B8C;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    margin-top: 15px;
 }
 
-/* BOUTON DÉCONNEXION */
+/* BOUTON DÉCONNEXION DISCRET */
 #logout-btn {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    background: #FFFFFF;
-    color: #374151;
-    border: 1px solid #D1D5DB;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 500;
+    top: 30px;
+    right: 30px;
+    background: transparent;
+    color: #A89B8C;
+    border: 1px solid rgba(168, 155, 140, 0.3);
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 #logout-btn:hover {
-    background: #F3F4F6;
-    color: #111827;
+    color: #C5A059;
+    border-color: #C5A059;
+    background: rgba(197, 160, 89, 0.05);
 }
 
-/* CONTENEUR PRINCIPAL */
+/* CONTENEUR PRINCIPAL - L'effet "Verre Fumé" */
 .container {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 0 20px;
-    background: transparent;
-    box-shadow: none; /* Plus de grosse boîte */
+    max-width: 1050px;
+    margin: 0 auto 60px;
+    padding: 40px;
+    background: rgba(34, 24, 24, 0.6); /* Fond sombre translucide */
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid rgba(197, 160, 89, 0.08); /* Reflet doré */
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
 }
 
-section { margin-bottom: 50px; }
+section { margin-bottom: 60px; }
 
 h2 {
-    font-weight: 500;
-    font-size: 1.25rem;
-    color: #111827;
-    margin-bottom: 20px;
-    text-align: left; /* Aligné à gauche, plus moderne */
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: 1.8rem;
+    color: #EAE0D5;
+    margin-bottom: 30px;
+    text-align: center;
+    position: relative;
 }
 
-/* FORMULAIRE (Style Carte) */
+/* Petite ligne dorée sous les titres */
+h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: #C5A059;
+    margin: 15px auto 0;
+}
+
+/* FORMULAIRE - Intégré et doux */
 form {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px;
-    background: #FFFFFF;
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03); /* Ombre très subtile */
-    border: 1px solid #F3F4F6;
+    gap: 20px;
 }
 
 input, select {
     width: 100%;
-    padding: 12px 16px;
-    font-size: 0.9rem;
-    font-family: 'Inter', sans-serif;
-    border: 1px solid #E5E7EB;
-    border-radius: 8px;
-    background: #F9FAFB;
-    transition: all 0.2s;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    font-family: 'Montserrat', sans-serif;
+    color: #EAE0D5;
+    background: rgba(10, 5, 5, 0.4); /* Champs très sombres */
+    border: 1px solid rgba(234, 224, 213, 0.1);
+    border-radius: 6px;
+    transition: all 0.3s ease;
     box-sizing: border-box;
 }
 
+input::placeholder { color: #887C70; }
+
 input:focus, select:focus {
     outline: none;
-    border-color: #9CA3AF;
-    background: #FFFFFF;
-    box-shadow: 0 0 0 3px rgba(243, 244, 246, 1); /* Contour doux au focus */
+    border-color: #8B1C31; /* Le focus rappelle la robe du vin */
+    background: rgba(10, 5, 5, 0.6);
+    box-shadow: 0 0 15px rgba(139, 28, 49, 0.3);
 }
 
-/* BOUTON D'AJOUT */
+/* BOUTON VALIDER - L'accent "Grand Cru" */
 button[type="submit"] {
-    background: #111827; /* Noir élégant */
-    color: #FFFFFF;
+    background: linear-gradient(135deg, #8B1C31 0%, #5A1220 100%);
+    color: #EAE0D5;
     border: none;
-    padding: 12px 24px;
+    padding: 14px 24px;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 500;
-    border-radius: 8px;
-    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background 0.2s;
-    grid-column: 1 / -1; /* Prend toute la largeur sur la dernière ligne */
+    transition: all 0.3s ease;
+    grid-column: 1 / -1;
+    box-shadow: 0 4px 15px rgba(139, 28, 49, 0.2);
 }
 
-button[type="submit"]:hover { background: #374151; }
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 28, 49, 0.4);
+    background: linear-gradient(135deg, #A2223A 0%, #6E1527 100%);
+}
 
 /* BARRE DE RECHERCHE */
 #search-bar {
     width: 100%;
-    max-width: 100%;
-    margin-bottom: 20px;
-    background: #FFFFFF;
+    margin-bottom: 30px;
     padding: 14px 20px;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    border: 1px solid #F3F4F6;
+    background: rgba(10, 5, 5, 0.4);
+    border: 1px solid rgba(197, 160, 89, 0.2);
+    border-radius: 6px;
+    color: #EAE0D5;
 }
 
-/* TABLEAU ET LISTE */
+/* TABLEAU - Liste de la cave */
 table {
     width: 100%;
     border-collapse: collapse;
-    background: #FFFFFF;
-    border-radius: 12px;
-    overflow: hidden; /* Garde les coins arrondis */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
-    border: 1px solid #F3F4F6;
 }
 
 th {
-    background: #F9FAFB;
-    color: #6B7280;
-    font-size: 0.75rem;
+    background: transparent;
+    color: #C5A059;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 600;
-    padding: 16px 24px;
-    border-bottom: 1px solid #E5E7EB;
+    letter-spacing: 2px;
+    padding: 15px 10px;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.3);
     cursor: pointer;
+    text-align: left;
 }
 
 td {
-    padding: 16px 24px;
-    font-size: 0.9rem;
-    color: #374151;
-    border-bottom: 1px solid #F3F4F6;
+    padding: 20px 10px;
+    font-size: 0.95rem;
+    color: #EAE0D5;
+    border-bottom: 1px solid rgba(234, 224, 213, 0.05);
+    font-weight: 300;
 }
 
-tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover { background-color: #F9FAFB; }
+/* Lignes alternées douces */
+tbody tr { transition: background 0.3s ease; }
+tbody tr:hover { background-color: rgba(255, 255, 255, 0.02); }
 
-/* BOUTONS ACTIONS (Tableau) */
+/* BOUTONS D'ACTIONS (Modifier / Supprimer) */
 .edit-btn, .delete-btn {
     background: transparent;
     border: none;
-    font-size: 0.85rem;
-    font-weight: 500;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     cursor: pointer;
-    padding: 6px 12px;
-    border-radius: 6px;
-    transition: all 0.2s;
+    padding: 6px 10px;
+    transition: all 0.3s ease;
 }
 
-.edit-btn { color: #4F46E5; } /* Bleu indigo moderne */
-.edit-btn:hover { background: #EEF2FF; }
+.edit-btn { color: #A89B8C; }
+.edit-btn:hover { color: #C5A059; }
 
-.delete-btn { color: #DC2626; } /* Rouge discret */
-.delete-btn:hover { background: #FEF2F2; }
+.delete-btn { color: #6E1527; margin-left: 10px;}
+.delete-btn:hover { color: #8B1C31; }
 
-/* TOAST (Notification) */
+/* TOAST (Notifications) */
 .toast {
-    background: #111827;
-    color: #FFFFFF;
-    border-radius: 8px;
-    padding: 12px 24px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    background: rgba(34, 24, 24, 0.95);
+    border: 1px solid #C5A059;
+    color: #C5A059;
+    border-radius: 6px;
+    padding: 15px 30px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
-.toast.error { background: #DC2626; }
+.toast.error {
+    border-color: #8B1C31;
+    color: #EAE0D5;
+}
