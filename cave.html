@@ -106,7 +106,21 @@
       </form>
     </div>
   </div>
-
+<button id="chatbot-toggle" class="sommelier-fab">🍷 Sommelier</button>
+  
+  <div id="chatbot-window" class="chatbot-window">
+    <div class="chatbot-header">
+      <h3>Sommelier Épicuvin</h3>
+      <button id="chatbot-close" class="close-btn">&times;</button>
+    </div>
+    <div id="chatbot-messages" class="chatbot-messages">
+      <div class="message bot">Bonjour. Je connais votre cave sur le bout des doigts. Que dégustons-nous aujourd'hui ?</div>
+    </div>
+    <div class="chatbot-input">
+      <input type="text" id="chatbot-input-field" placeholder="Ex: Quel vin pour une côte de bœuf ?">
+      <button id="chatbot-send">Demander</button>
+    </div>
+  </div>
   <div id="toast" class="toast" style="display:none;"></div>
   <script type="module" src="script.js"></script>
 </body>

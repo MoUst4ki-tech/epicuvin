@@ -272,3 +272,70 @@ document.getElementById("search-bar").addEventListener("input", (e) => {
   currentSearch = e.target.value;
   renderGrid(); // Filtre en temps réel
 });
+
+// ==========================================
+// 12. LE SOMMELIER VIRTUEL (IA)
+// ==========================================
+const chatbotToggle = document.getElementById("chatbot-toggle");
+const chatbotWindow = document.getElementById("chatbot-window");
+const chatbotClose = document.getElementById("chatbot-close");
+const chatbotSendBtn = document.getElementById("chatbot-send");
+const chatbotInputField = document.getElementById("chatbot-input-field");
+const chatbotMessages = document.getElementById("chatbot-messages");
+
+// Remplacer par l'URL de votre fonction Firebase !
+const BACKEND_URL = "https://us-central1-epicuvin.cloudfunctions.net/api/sommelier"; 
+
+// Ouvrir/Fermer la fenêtre
+chatbotToggle.addEventListener("click", () => chatbotWindow.classList.add("active"));
+chatbotClose.addEventListener("click", () => chatbotWindow.classList.remove("active"));
+
+// Ajouter un message dans la boîte
+function appendMessage(text, sender) {
+  const div = document.createElement("div");
+  div.className = `message ${sender}`;
+  div.textContent = text;
+  chatbotMessages.appendChild(div);
+  chatbotMessages.scrollTop = chatbotMessages.scrollHeight; // Scroll vers le bas
+}
+
+// Envoyer la demande à Gemini
+async function askSommelier() {
+  const text = chatbotInputField.value.trim();
+  if (!text) return;
+
+  // 1. Afficher le message de l'utilisateur
+  appendMessage(text, "user");
+  chatbotInputField.value = "";
+  
+  // Petit message d'attente
+  appendMessage("...", "bot");
+  const loadingMessage = chatbotMessages.lastChild;
+
+  try {
+    // 2. Envoi de la demande ET de la cave (wineData) au Backend
+    const response = await fetch(BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: text,
+        cellar: wineData // Le tableau qui contient tous vos vins !
+      })
+    });
+
+    const data = await response.json();
+    
+    // 3. Remplacer "..." par la vraie réponse
+    chatbotMessages.removeChild(loadingMessage);
+    appendMessage(data.reply, "bot");
+
+  } catch (error) {
+    chatbotMessages.removeChild(loadingMessage);
+    appendMessage("Erreur de connexion avec la cave.", "bot");
+  }
+}
+
+chatbotSendBtn.addEventListener("click", askSommelier);
+chatbotInputField.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") askSommelier();
+});
