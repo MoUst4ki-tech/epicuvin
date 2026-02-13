@@ -1,17 +1,11 @@
-/* --- PALETTE SOMMELIER PREMIUM ---
-   Fond principal : #140F0F (Noir très légèrement pourpre/chaud)
-   Conteneurs : #221818 (Gris de chauffe bordeaux)
-   Texte principal : #EAE0D5 (Champagne / Crème)
-   Titres / Or : #C5A059 (Or vieilli)
-   Accents : #8B1C31 (Rouge Rubis / Grand Cru)
------------------------------------ */
-
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap');
+/* ========================================= */
+/* PALETTE SOMMELIER PREMIUM                 */
+/* ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap');
 
 body {
     font-family: 'Montserrat', sans-serif;
     background-color: #140F0F;
-    /* Un léger dégradé radial pour l'effet "lumière tamisée sur une table" */
     background: radial-gradient(circle at 50% 0%, #2A1A1A 0%, #140F0F 70%);
     color: #EAE0D5;
     margin: 0;
@@ -19,344 +13,400 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Cache l'overlay de l'ancien design */
-.background-overlay { display: none; }
-
-/* HEADER - Feutré et élégant */
+/* ========================================= */
+/* HEADER & NAVIGATION                       */
+/* ========================================= */
 header {
-    padding: 60px 20px 40px;
+    padding: 40px 20px 20px;
     text-align: center;
     position: relative;
-    border-bottom: 1px solid rgba(197, 160, 89, 0.15); /* Ligne or très fine */
+    border-bottom: 1px solid rgba(197, 160, 89, 0.15);
 }
 
 header h1 {
     font-family: 'Playfair Display', serif;
     font-weight: 600;
-    font-size: 2.5rem;
-    color: #C5A059; /* Or vieilli */
+    font-size: 2.2rem;
+    color: #C5A059;
     letter-spacing: 4px;
     text-transform: uppercase;
     margin: 0;
-    text-shadow: 0 2px 10px rgba(197, 160, 89, 0.2);
 }
 
 header p {
     font-family: 'Playfair Display', serif;
     font-style: italic;
     color: #A89B8C;
-    font-size: 1.1rem;
+    font-size: 1rem;
     letter-spacing: 1px;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
-/* BOUTON DÉCONNEXION DISCRET */
 #logout-btn {
     position: absolute;
-    top: 30px;
+    top: 20px;
     right: 30px;
     background: transparent;
     color: #A89B8C;
     border: 1px solid rgba(168, 155, 140, 0.3);
-    padding: 8px 18px;
+    padding: 8px 15px;
     border-radius: 4px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
+    font-size: 0.75rem;
     text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s;
 }
 
 #logout-btn:hover {
     color: #C5A059;
     border-color: #C5A059;
-    background: rgba(197, 160, 89, 0.05);
 }
 
-/* CONTENEUR PRINCIPAL - L'effet "Verre Fumé" */
 .container {
-    max-width: 1050px;
-    margin: 0 auto 60px;
-    padding: 40px;
-    background: rgba(34, 24, 24, 0.6); /* Fond sombre translucide */
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    border: 1px solid rgba(197, 160, 89, 0.08); /* Reflet doré */
-    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px;
 }
 
-section { margin-bottom: 60px; }
-
-h2 {
-    font-family: 'Playfair Display', serif;
-    font-weight: 400;
-    font-size: 1.8rem;
-    color: #EAE0D5;
-    margin-bottom: 30px;
-    text-align: center;
-    position: relative;
-}
-
-/* Petite ligne dorée sous les titres */
-h2::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 1px;
-    background: #C5A059;
-    margin: 15px auto 0;
-}
-
-/* FORMULAIRE - Intégré et doux */
-form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+/* ========================================= */
+/* TOOLBAR (Recherche + Bouton Ajout)        */
+/* ========================================= */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
     gap: 20px;
 }
 
-input, select {
-    width: 100%;
-    padding: 14px 16px;
-    font-size: 0.95rem;
-    font-family: 'Montserrat', sans-serif;
+#cellar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
     color: #EAE0D5;
-    background: rgba(10, 5, 5, 0.4); /* Champs très sombres */
-    border: 1px solid rgba(234, 224, 213, 0.1);
+    margin: 0;
+}
+
+#cellar-title span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    color: #A89B8C;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+.actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#search-bar {
+    padding: 12px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(197, 160, 89, 0.2);
     border-radius: 6px;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
+    color: #EAE0D5;
+    font-family: 'Montserrat', sans-serif;
+    width: 250px;
+    transition: all 0.3s;
 }
 
-input::placeholder { color: #887C70; }
-
-input:focus, select:focus {
+#search-bar:focus {
     outline: none;
-    border-color: #8B1C31; /* Le focus rappelle la robe du vin */
-    background: rgba(10, 5, 5, 0.6);
-    box-shadow: 0 0 15px rgba(139, 28, 49, 0.3);
+    border-color: #C5A059;
+    width: 280px;
 }
 
-/* BOUTON VALIDER - L'accent "Grand Cru" */
-button[type="submit"] {
+.primary-btn {
     background: linear-gradient(135deg, #8B1C31 0%, #5A1220 100%);
     color: #EAE0D5;
     border: none;
-    padding: 14px 24px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    padding: 12px 24px;
     border-radius: 6px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    grid-column: 1 / -1;
+    transition: all 0.3s;
     box-shadow: 0 4px 15px rgba(139, 28, 49, 0.2);
 }
 
-button[type="submit"]:hover {
+.primary-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(139, 28, 49, 0.4);
     background: linear-gradient(135deg, #A2223A 0%, #6E1527 100%);
 }
 
-/* BARRE DE RECHERCHE */
-#search-bar {
-    width: 100%;
-    margin-bottom: 30px;
-    padding: 14px 20px;
-    background: rgba(10, 5, 5, 0.4);
-    border: 1px solid rgba(197, 160, 89, 0.2);
-    border-radius: 6px;
-    color: #EAE0D5;
-}
-
-/* TABLEAU - Liste de la cave */
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th {
-    background: transparent;
-    color: #C5A059;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    padding: 15px 10px;
-    border-bottom: 1px solid rgba(197, 160, 89, 0.3);
-    cursor: pointer;
-    text-align: left;
-}
-
-td {
-    padding: 20px 10px;
-    font-size: 0.95rem;
-    color: #EAE0D5;
-    border-bottom: 1px solid rgba(234, 224, 213, 0.05);
-    font-weight: 300;
-}
-
-/* Lignes alternées douces */
-tbody tr { transition: background 0.3s ease; }
-tbody tr:hover { background-color: rgba(255, 255, 255, 0.02); }
-
-/* BOUTONS D'ACTIONS (Modifier / Supprimer) */
-.edit-btn, .delete-btn {
-    background: transparent;
-    border: none;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    cursor: pointer;
-    padding: 6px 10px;
+/* ========================================= */
+/* LA MODALE (Fenêtre Pop-up Formulaire)     */
+/* ========================================= */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(10, 5, 5, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Caché par défaut */
+    opacity: 0;
+    visibility: hidden;
     transition: all 0.3s ease;
 }
 
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: #1A1212;
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 30px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+    
+    /* Animation d'entrée */
+    transform: translateY(30px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.15);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+    color: #C5A059;
+    font-size: 1.5rem;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: #A89B8C;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close-btn:hover { color: #EAE0D5; }
+
+/* Styles du formulaire interne */
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #A89B8C;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 5px;
+}
+
+.input-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.input-row > * { flex: 1; }
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(197, 160, 89, 0.2);
+    border-radius: 6px;
+    color: #EAE0D5;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #8B1C31;
+    background: rgba(0,0,0,0.6);
+}
+
+.submit-btn {
+    width: 100%;
+    background: #C5A059;
+    color: #140F0F;
+    border: none;
+    padding: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.submit-btn:hover { background: #E0C07D; }
+
+
+/* ========================================= */
+/* GRILLE DES VINS (Les Cartes)              */
+/* ========================================= */
+.wine-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.wine-card {
+    background: linear-gradient(145deg, #221818 0%, #1A1212 100%);
+    border: 1px solid rgba(197, 160, 89, 0.15);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.wine-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    border-color: rgba(197, 160, 89, 0.4);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 10px;
+}
+
+.wine-type-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.wine-year {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: #C5A059;
+    font-weight: 600;
+}
+
+.card-body h3 {
+    margin: 0 0 5px 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: #EAE0D5;
+}
+
+.appellation {
+    font-size: 0.85rem;
+    color: #A89B8C;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 15px 0;
+}
+
+.wine-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    background: rgba(0,0,0,0.2);
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.stock-badge {
+    font-weight: 600;
+    color: #C5A059;
+}
+
+.apogee {
+    font-size: 0.8rem;
+    color: #A89B8C;
+    font-style: italic;
+    margin: 0 0 15px 0;
+}
+
+.card-actions {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 15px;
+}
+
+.card-actions button {
+    background: transparent;
+    border: none;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
 .edit-btn { color: #A89B8C; }
-.edit-btn:hover { color: #C5A059; }
+.edit-btn:hover { color: #EAE0D5; }
 
-.delete-btn { color: #6E1527; margin-left: 10px;}
-.delete-btn:hover { color: #8B1C31; }
+.delete-btn { color: #8B1C31; }
+.delete-btn:hover { color: #DC2626; }
 
-/* TOAST (Notifications) */
+/* ========================================= */
+/* TOAST & LOADER                            */
+/* ========================================= */
 .toast {
-    background: rgba(34, 24, 24, 0.95);
+    position: fixed;
+    bottom: 30px; left: 50%; transform: translateX(-50%);
+    background: rgba(20, 15, 15, 0.95);
     border: 1px solid #C5A059;
     color: #C5A059;
     border-radius: 6px;
     padding: 15px 30px;
     font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-.toast.error {
-    border-color: #8B1C31;
-    color: #EAE0D5;
+    z-index: 2000;
 }
 
 /* ========================================= */
-/* RESPONSIVE DESIGN (Tablettes & Mobiles) */
+/* RESPONSIVE DESIGN                         */
 /* ========================================= */
-
-/* --- TABLETTES (max-width: 1024px) --- */
-@media (max-width: 1024px) {
-    .container {
-        max-width: 95%;
-        padding: 30px;
-    }
-    header h1 {
-        font-size: 2rem;
-    }
-}
-
-/* --- SMARTPHONES (max-width: 768px) --- */
 @media (max-width: 768px) {
-    header {
-        padding: 40px 15px 25px;
-    }
-    header h1 {
-        font-size: 1.6rem;
-        letter-spacing: 2px;
-    }
-    header p {
-        font-size: 0.95rem;
-    }
-
-    /* Le bouton déconnexion passe sous le texte pour ne pas surcharger le haut */
-#logout-btn {
-            position: relative !important; /* Force l'annulation de tout placement absolu */
-            top: auto;
-            right: auto;
-            display: inline-block;
-            margin-top: 20px;
-            padding: 8px 20px;
-        }
-
-    .container {
-        padding: 25px 15px;
-        margin-bottom: 30px;
-        border-radius: 12px;
-    }
-
-    h2 {
-        font-size: 1.5rem;
-    }
-
-    /* Le formulaire passe sur une seule colonne */
-    form {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-
-    input, select {
-        padding: 12px;
-    }
-
-    /* ========================================= */
-    /* TRANSFORMATION DU TABLEAU EN CARTES (MOBILE)*/
-    /* ========================================= */
+    .toolbar { flex-direction: column; align-items: flex-start; }
+    .actions { width: 100%; justify-content: space-between; }
+    #search-bar { width: 100%; margin-bottom: 10px; }
+    .input-row { flex-direction: column; gap: 0; }
     
-    table, thead, tbody, th, td, tr {
-        display: block;
-    }
-
-    /* On cache visuellement l'en-tête du tableau */
-    thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-    }
-
-    /* Chaque ligne devient une belle carte foncée avec reflet doré */
-    tbody tr {
-        background: rgba(10, 5, 5, 0.6);
-        border: 1px solid rgba(197, 160, 89, 0.2);
-        border-radius: 12px;
-        margin-bottom: 20px;
-        padding: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-    }
-
-    /* Les cellules s'organisent en ligne (Label à gauche, Valeur à droite) */
-    td {
-        border: none;
+    #logout-btn {
         position: relative;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 5px;
-        border-bottom: 1px solid rgba(234, 224, 213, 0.05);
-        font-size: 0.95rem;
-        text-align: right; /* La valeur du vin s'aligne à droite */
-    }
-
-    /* On retire la bordure du dernier élément (les boutons) */
-    td:last-child {
-        border-bottom: none;
-        justify-content: flex-end;
-        padding-top: 15px;
-    }
-
-    /* Création des "Labels" dorés à la volée grâce à l'attribut data-label */
-    td::before {
-        content: attr(data-label);
-        font-family: 'Montserrat', sans-serif;
-        color: #C5A059;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-weight: 500;
-        text-align: left;
-        padding-right: 15px;
-    }
-    
-    /* Boutons d'actions plus espacés pour les gros doigts sur tactile */
-    .edit-btn, .delete-btn {
-        padding: 8px 12px;
-        font-size: 0.85rem;
+        top: 0; right: 0;
+        margin-top: 15px;
     }
 }
