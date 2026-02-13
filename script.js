@@ -97,13 +97,19 @@ form.addEventListener("submit", async (e) => {
 
   const id = document.getElementById("wine-id").value;
   
-  const wine = {
+const wine = {
     nom: document.getElementById("name").value,
+    type: document.getElementById("type").value, // NOUVEAU
     annee: document.getElementById("year").value,
-    quantite: document.getElementById("quantity").value,
+    appellation: document.getElementById("appellation").value, // NOUVEAU
     region: document.getElementById("region").value,
+    cepage: document.getElementById("cepage").value, // NOUVEAU
+    format: document.getElementById("format").value, // NOUVEAU
+    quantite: document.getElementById("quantity").value,
+    apogeeDebut: document.getElementById("apogee-debut").value, // NOUVEAU
+    apogeeFin: document.getElementById("apogee-fin").value, // NOUVEAU
     commentaire: document.getElementById("commentaire").value,
-    proprietaire: currentUser, // Attribué automatiquement à l'email en cours
+    proprietaire: currentUser,
     dateModification: new Date()
   };
 

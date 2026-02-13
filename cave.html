@@ -26,27 +26,70 @@
       <h2>🍷 Ajouter / Modifier un Vin</h2>
       <form id="wine-form">
         <input type="hidden" id="wine-id">
-        <input type="text" id="name" placeholder="Nom du vin" required>
-        <input type="text" id="year" placeholder="Année" required>
-        <input type="text" id="quantity" placeholder="Quantité" required>
-        <select id="region" required>
-            <option value="">Région</option>
-            <option value="Bordeaux">Bordeaux</option>
-            <option value="Bourgogne">Bourgogne</option>
-            <option value="Champagne">Champagne</option>
-            <option value="Alsace">Alsace</option>
-            <option value="Vallée du Rhône">Vallée du Rhône</option>
-            <option value="Vallée de la Loire">Vallée de la Loire</option>
-            <option value="Languedoc">Languedoc</option>
-            <option value="Provence">Provence</option>
-            <option value="Sud-Ouest">Sud-Ouest</option>
-            <option value="Jura">Jura</option>
-            <option value="Savoie">Savoie</option>
-            <option value="Corse">Corse</option>
-          </select>
-          
-          <input type="text" id="commentaire" placeholder="Commentaire">
-        <button type="submit">Valider</button>
+<input type="text" id="name" placeholder="Domaine / Château (ex: Château Margaux)" required>
+
+<select id="type" required>
+  <option value="">Type de vin</option>
+  <option value="Rouge">🍷 Rouge</option>
+  <option value="Blanc">🥂 Blanc</option>
+  <option value="Rosé">🌸 Rosé</option>
+  <option value="Effervescent">🍾 Effervescent (Champagne, Crémant)</option>
+  <option value="Liquoreux">🍯 Blanc Liquoreux / Moelleux</option>
+  <option value="Muté">🥃 Vin Muté (Porto, Banyuls)</option>
+</select>
+
+<input type="number" id="year" placeholder="Millésime (Année)" required>
+<input type="text" id="appellation" placeholder="Appellation (ex: Châteauneuf-du-Pape)">
+
+<select id="region" required>
+  <option value="">Sélectionnez une région</option>
+  <optgroup label="France - Les Classiques">
+    <option value="Bordeaux">Bordeaux</option>
+    <option value="Bourgogne">Bourgogne</option>
+    <option value="Vallée du Rhône">Vallée du Rhône</option>
+    <option value="Champagne">Champagne</option>
+    <option value="Vallée de la Loire">Vallée de la Loire</option>
+    <option value="Alsace">Alsace</option>
+  </optgroup>
+  <optgroup label="France - Autres Régions">
+    <option value="Languedoc">Languedoc</option>
+    <option value="Roussillon">Roussillon</option>
+    <option value="Provence">Provence</option>
+    <option value="Sud-Ouest">Sud-Ouest</option>
+    <option value="Beaujolais">Beaujolais</option>
+    <option value="Jura">Jura</option>
+    <option value="Savoie">Savoie</option>
+    <option value="Corse">Corse</option>
+  </optgroup>
+  <optgroup label="Vins du Monde">
+    <option value="Italie">Italie</option>
+    <option value="Espagne">Espagne</option>
+    <option value="États-Unis">États-Unis</option>
+    <option value="Amérique du Sud">Amérique du Sud</option>
+    <option value="Australie/Nouvelle-Zélande">Australie / N-Zélande</option>
+    <option value="Autre pays">Autre pays</option>
+  </optgroup>
+</select>
+
+<input type="text" id="cepage" placeholder="Cépage(s) dominant(s) (ex: Pinot Noir, Merlot...)">
+
+<select id="format">
+  <option value="Bouteille (75cl)">Bouteille (75cl)</option>
+  <option value="Magnum (1.5L)">Magnum (1.5L)</option>
+  <option value="Demi (37.5cl)">Demi (37.5cl)</option>
+  <option value="Jéroboam (3L)">Jéroboam (3L) ou plus</option>
+</select>
+
+<input type="number" id="quantity" placeholder="Quantité en cave" required>
+
+<div style="display: flex; gap: 10px;">
+  <input type="number" id="apogee-debut" placeholder="Boire à partir de (ex: 2026)">
+  <input type="number" id="apogee-fin" placeholder="Jusqu'à (ex: 2035)">
+</div>
+
+<input type="text" id="commentaire" placeholder="Notes de dégustation ou localisation (ex: Étagère 3)">
+
+<button type="submit">Valider</button>
       </form>
     </section>
     <div id="loader" style="display:none; text-align:center; font-size:18px; margin: 20px 0; color: #7b1e1e;">
