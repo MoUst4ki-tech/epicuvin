@@ -267,14 +267,14 @@ tbody tr:hover { background-color: rgba(255, 255, 255, 0.02); }
     }
 
     /* Le bouton déconnexion passe sous le texte pour ne pas surcharger le haut */
-    #logout-btn {
-        position: relative;
-        top: 0;
-        right: 0;
-        display: inline-block;
-        margin-top: 20px;
-        padding: 8px 20px;
-    }
+#logout-btn {
+            position: relative !important; /* Force l'annulation de tout placement absolu */
+            top: auto;
+            right: auto;
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 20px;
+        }
 
     .container {
         padding: 25px 15px;
