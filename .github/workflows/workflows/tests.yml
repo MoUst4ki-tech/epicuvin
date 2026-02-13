@@ -28,6 +28,7 @@ jobs:
     - name: 🤖 Lancer les tests Playwright
       run: |
         serve -l 3000 & 
+        npx wait-on http://localhost:3000
         npx playwright test
       env:
         PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
