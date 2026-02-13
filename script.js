@@ -1,4 +1,6 @@
-// --- 1. IMPORTS FIREBASE ---
+// ==========================================
+// 1. IMPORTS FIREBASE
+// ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
 import { 
@@ -8,7 +10,9 @@ import {
   getAuth, onAuthStateChanged, signOut 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// --- 2. CONFIGURATION FIREBASE ---
+// ==========================================
+// 2. CONFIGURATION FIREBASE
+// ==========================================
 const firebaseConfig = {
   apiKey: "AIzaSyAZQqueroo-GNWMVENm3c2-j0T8d7dpsjs",
   authDomain: "epicuvin.firebaseapp.com",
@@ -19,61 +23,83 @@ const firebaseConfig = {
   measurementId: "G-LN4MVN4DED"
 };
 
-// --- 3. INITIALISATION ---
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const winesCollection = collection(db, "vins");
 
-// --- 4. VARIABLES GLOBALES ---
-const form = document.getElementById("wine-form");
-const tableBody = document.getElementById("wine-table-body");
+// ==========================================
+// 3. VARIABLES GLOBALES & ÉLÉMENTS DOM
+// ==========================================
 let wineData = [];
-let currentSort = { key: "", asc: true };
 let currentSearch = "";
 let currentUser = null;
 
-// --- 5. GESTION DE L'AUTHENTIFICATION ---
+const form = document.getElementById("wine-form");
+const wineGrid = document.getElementById("wine-grid");
+const modal = document.getElementById("wine-modal");
+const loader = document.getElementById("loader");
+
+// ==========================================
+// 4. AUTHENTIFICATION & DÉCONNEXION
+// ==========================================
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    // L'utilisateur est connecté, on enregistre son email et on charge SES vins
     currentUser = user.email; 
     initRealTimeListener();
   } else {
-    // Pas d'utilisateur : retour à la page de connexion
     window.location.href = "index.html";
   }
 });
 
-// Déconnexion
 document.getElementById("logout-btn").addEventListener("click", () => {
   signOut(auth).then(() => {
     window.location.href = "index.html";
-  }).catch((error) => {
-    console.error("Erreur déconnexion:", error);
-  });
+  }).catch((error) => console.error("Erreur déconnexion:", error));
 });
 
-// --- 6. GESTION DES NOTIFICATIONS (TOASTS) ---
+// ==========================================
+// 5. GESTION DE LA MODALE
+// ==========================================
+document.getElementById("open-modal-btn").addEventListener("click", () => {
+  form.reset();
+  document.getElementById("wine-id").value = "";
+  document.getElementById("modal-title").textContent = "Entrer un nouveau vin";
+  modal.classList.add("active");
+});
+
+document.getElementById("close-modal-btn").addEventListener("click", () => {
+  modal.classList.remove("active");
+});
+
+// Fermer en cliquant en dehors de la boîte
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) modal.classList.remove("active");
+});
+
+// ==========================================
+// 6. SYSTÈME DE NOTIFICATIONS (TOASTS)
+// ==========================================
 function showToast(message, isError = false) {
   const toast = document.getElementById("toast");
   toast.textContent = message;
   toast.className = `toast${isError ? " error" : ""}`;
   toast.style.display = "block";
 
-  setTimeout(() => { toast.classList.add("hide"); }, 2500);
+  setTimeout(() => toast.classList.add("hide"), 2500);
   setTimeout(() => {
     toast.style.display = "none";
     toast.classList.remove("hide", "error");
   }, 3000);
 }
 
-// --- 7. LECTURE EN TEMPS RÉEL ---
+// ==========================================
+// 7. LECTURE DE LA CAVE EN TEMPS RÉEL
+// ==========================================
 function initRealTimeListener() {
-  document.getElementById("loader").style.display = "block";
+  loader.style.display = "block";
 
-  // On demande à Firestore uniquement les vins de l'utilisateur connecté
   const q = query(winesCollection, where("proprietaire", "==", currentUser));
 
   onSnapshot(q, (snapshot) => {
@@ -82,39 +108,44 @@ function initRealTimeListener() {
       ...doc.data()
     }));
     
-    document.getElementById("loader").style.display = "none";
-    applySorting();
+    // Tri alphabétique par défaut sur le nom du vin
+    wineData.sort((a, b) => a.nom.localeCompare(b.nom));
+    
+    loader.style.display = "none";
+    renderGrid();
   }, (error) => {
     console.error("Erreur de récupération:", error);
-    showToast("Erreur de connexion à la base de données", true);
-    document.getElementById("loader").style.display = "none";
+    showToast("Erreur de connexion à la cave", true);
+    loader.style.display = "none";
   });
 }
 
-// --- 8. AJOUT ET MODIFICATION ---
+// ==========================================
+// 8. AJOUT ET MODIFICATION D'UN VIN
+// ==========================================
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const id = document.getElementById("wine-id").value;
   
-const wine = {
+  const wine = {
     nom: document.getElementById("name").value,
-    type: document.getElementById("type").value, // NOUVEAU
+    type: document.getElementById("type").value,
     annee: document.getElementById("year").value,
-    appellation: document.getElementById("appellation").value, // NOUVEAU
+    appellation: document.getElementById("appellation").value,
     region: document.getElementById("region").value,
-    cepage: document.getElementById("cepage").value, // NOUVEAU
-    format: document.getElementById("format").value, // NOUVEAU
-    quantite: document.getElementById("quantity").value,
-    apogeeDebut: document.getElementById("apogee-debut").value, // NOUVEAU
-    apogeeFin: document.getElementById("apogee-fin").value, // NOUVEAU
+    cepage: document.getElementById("cepage").value,
+    format: document.getElementById("format").value,
+    quantite: parseInt(document.getElementById("quantity").value) || 0,
+    apogeeDebut: document.getElementById("apogee-debut").value,
+    apogeeFin: document.getElementById("apogee-fin").value,
     commentaire: document.getElementById("commentaire").value,
     proprietaire: currentUser,
     dateModification: new Date()
   };
 
-  const loader = document.getElementById("loader");
   loader.style.display = "block";
+  modal.classList.remove("active"); // On ferme la modale pendant l'enregistrement
 
   try {
     if (id) {
@@ -126,115 +157,118 @@ const wine = {
       await addDoc(winesCollection, wine);
       showToast("Nouveau vin ajouté à la cave");
     }
-    
     form.reset();
-    document.getElementById("wine-id").value = "";
-    
   } catch (error) {
     console.error("Erreur d'écriture:", error);
     showToast("Erreur lors de l'enregistrement", true);
+    modal.classList.add("active"); // On réouvre la modale en cas d'erreur
   } finally {
     loader.style.display = "none";
   }
 });
 
-// --- 9. FONCTIONS D'AFFICHAGE ET TRI ---
-function applySorting() {
-  if (currentSort.key) {
-    wineData.sort((a, b) => {
-      const valA = a[currentSort.key] || "";
-      const valB = b[currentSort.key] || "";
+// ==========================================
+// 9. AFFICHAGE DES CARTES DE DÉGUSTATION
+// ==========================================
+function renderGrid() {
+  wineGrid.innerHTML = "";
+  let totalBouteilles = 0;
 
-      if (!isNaN(valA) && !isNaN(valB) && valA !== "" && valB !== "") {
-        return currentSort.asc ? valA - valB : valB - valA;
-      }
-      return currentSort.asc
-        ? valA.toString().localeCompare(valB.toString())
-        : valB.toString().localeCompare(valA.toString());
-    });
-  }
-  renderTable();
-  updateHeaderArrows();
-}
-
-function renderTable() {
-  tableBody.innerHTML = "";
-
+  // Filtrage par la barre de recherche
   const filtered = wineData.filter(wine => {
-    const combined = `${wine.nom} ${wine.annee} ${wine.quantite} ${wine.region} ${wine.commentaire}`.toLowerCase();
+    const combined = `${wine.nom} ${wine.annee} ${wine.region} ${wine.appellation || ""} ${wine.cepage || ""}`.toLowerCase();
     return combined.includes(currentSearch.toLowerCase());
   });
 
   filtered.forEach(wine => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td data-label="Nom">${wine.nom}</td>
-      <td data-label="Année">${wine.annee}</td>
-      <td data-label="Quantité">${wine.quantite}</td>
-      <td data-label="Région">${wine.region}</td>
-      <td data-label="Commentaire">${wine.commentaire || "-"}</td>
-      <td data-label="Actions">
+    totalBouteilles += parseInt(wine.quantite) || 0;
+
+    // Définition de la couleur de la pastille selon le type
+    let typeColor = "#A89B8C"; // Défaut
+    if (wine.type === "Rouge") typeColor = "#8B1C31"; // Rouge sombre
+    if (wine.type === "Blanc") typeColor = "#F4E0A1"; // Or clair
+    if (wine.type === "Rosé") typeColor = "#F1A7A9"; // Rosé
+    if (wine.type === "Effervescent") typeColor = "#E8D595"; // Champagne
+    if (wine.type === "Liquoreux") typeColor = "#D4AF37"; // Or profond
+    if (wine.type === "Muté") typeColor = "#5A1220"; // Rubis très sombre
+
+    // Création de la carte HTML
+    const card = document.createElement("div");
+    card.className = "wine-card";
+    
+    card.innerHTML = `
+      <div class="card-header">
+        <span class="wine-type-dot" style="background-color: ${typeColor};" title="${wine.type || 'Inconnu'}"></span>
+        <span class="wine-year">${wine.annee || "NV"}</span>
+      </div>
+      <div class="card-body">
+        <h3>${wine.nom}</h3>
+        <p class="appellation">${wine.appellation || wine.region}</p>
+        <div class="wine-details">
+          <span>${wine.format || "Bouteille (75cl)"}</span>
+          <span class="stock-badge">${wine.quantite} en cave</span>
+        </div>
+        ${wine.apogeeDebut ? `<p class="apogee">⏳ Garde : ${wine.apogeeDebut} - ${wine.apogeeFin || '...'}</p>` : ''}
+      </div>
+      <div class="card-actions">
         <button class="edit-btn">Modifier</button>
         <button class="delete-btn">Retirer</button>
-      </td>
+      </div>
     `;
     
-    row.querySelector(".edit-btn").addEventListener("click", () => editWine(wine));
-    row.querySelector(".delete-btn").addEventListener("click", () => deleteWine(wine.id));
+    // Attachement des événements (Modifier / Retirer)
+    card.querySelector(".edit-btn").addEventListener("click", () => editWine(wine));
+    card.querySelector(".delete-btn").addEventListener("click", () => deleteWine(wine.id));
 
-    tableBody.appendChild(row);
+    wineGrid.appendChild(card);
   });
+
+  // Mise à jour du titre du tableau de bord
+  document.getElementById("cellar-title").innerHTML = `Ma Cave <span>(${totalBouteilles} bouteilles)</span>`;
 }
 
-function updateHeaderArrows() {
-  document.querySelectorAll("th[data-key]").forEach(th => {
-    const key = th.dataset.key;
-    let label = th.textContent.replace(/[\u2191\u2193]/g, "").trim();
-    if (key === currentSort.key) {
-      label += currentSort.asc ? " ↑" : " ↓";
-    }
-    th.textContent = label;
-  });
-}
-
-// --- 10. ACTIONS UTILISATEUR (Modification / Suppression) ---
+// ==========================================
+// 10. ACTIONS (Remplir Formulaire / Supprimer)
+// ==========================================
 function editWine(wine) {
+  // Remplissage des champs
   document.getElementById("wine-id").value = wine.id;
   document.getElementById("name").value = wine.nom;
+  document.getElementById("type").value = wine.type || "";
   document.getElementById("year").value = wine.annee;
+  document.getElementById("appellation").value = wine.appellation || "";
+  document.getElementById("region").value = wine.region || "";
+  document.getElementById("cepage").value = wine.cepage || "";
+  document.getElementById("format").value = wine.format || "Bouteille (75cl)";
   document.getElementById("quantity").value = wine.quantite;
-  document.getElementById("region").value = wine.region;
+  document.getElementById("apogee-debut").value = wine.apogeeDebut || "";
+  document.getElementById("apogee-fin").value = wine.apogeeFin || "";
   document.getElementById("commentaire").value = wine.commentaire || "";
   
-  document.querySelector(".form-section").scrollIntoView({ behavior: "smooth" });
+  // Ouverture de la modale
+  document.getElementById("modal-title").textContent = "Modifier ce vin";
+  modal.classList.add("active");
 }
 
 async function deleteWine(id) {
   if (confirm("Voulez-vous retirer ce vin de votre cave ?")) {
-    const loader = document.getElementById("loader");
     loader.style.display = "block";
     try {
       await deleteDoc(doc(db, "vins", id));
       showToast("Vin retiré de la cave");
     } catch (error) {
       console.error("Erreur suppression:", error);
-      showToast("Erreur lors de la suppression", true);
+      showToast("Erreur lors du retrait", true);
     } finally {
       loader.style.display = "none";
     }
   }
 }
 
-// --- 11. LISTENERS GLOBAUX ---
-document.querySelectorAll("th[data-key]").forEach(th => {
-  th.addEventListener("click", () => {
-    const key = th.dataset.key;
-    currentSort = { key, asc: currentSort.key === key ? !currentSort.asc : true };
-    applySorting();
-  });
-});
-
+// ==========================================
+// 11. BARRE DE RECHERCHE
+// ==========================================
 document.getElementById("search-bar").addEventListener("input", (e) => {
   currentSearch = e.target.value;
-  renderTable();
+  renderGrid(); // Filtre en temps réel
 });

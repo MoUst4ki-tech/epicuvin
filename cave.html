@@ -3,121 +3,110 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  
-  <title>Inventaire de Vins</title>
+  <title>Ma Cave - Épicuvin</title>
   <link rel="stylesheet" href="styles.css">
-  
   <link rel="apple-touch-icon" href="Images/Icon.webp" />
-  <link rel="apple-touch-icon" sizes="76x76" href="Images/Icon.webp" />
-  <link rel="apple-touch-icon" sizes="120x120" href="Images/Icon.webp" />
-  <link rel="apple-touch-icon" sizes="152x152" href="Images/Icon.webp" />
 </head>
 <body>
-  <div class="background-overlay"></div>
 
   <header>
-    <h1> Épicuvin - Inventaire de Vins</h1>
-    <p>Gérez votre cave avec élégance et simplicité</p>
+    <div class="header-content">
+      <h1>Épicuvin</h1>
+      <p>Votre Sommelier Personnel</p>
+    </div>
     <button id="logout-btn">Déconnexion</button>
   </header>
 
   <main class="container fade-in">
-    <section class="form-section">
-      <h2>🍷 Ajouter / Modifier un Vin</h2>
-      <form id="wine-form">
-        <input type="hidden" id="wine-id">
-<input type="text" id="name" placeholder="Domaine / Château (ex: Château Margaux)" required>
-
-<select id="type" required>
-  <option value="">Type de vin</option>
-  <option value="Rouge">🍷 Rouge</option>
-  <option value="Blanc">🥂 Blanc</option>
-  <option value="Rosé">🌸 Rosé</option>
-  <option value="Effervescent">🍾 Effervescent (Champagne, Crémant)</option>
-  <option value="Liquoreux">🍯 Blanc Liquoreux / Moelleux</option>
-  <option value="Muté">🥃 Vin Muté (Porto, Banyuls)</option>
-</select>
-
-<input type="number" id="year" placeholder="Millésime (Année)" required>
-<input type="text" id="appellation" placeholder="Appellation (ex: Châteauneuf-du-Pape)">
-
-<select id="region" required>
-  <option value="">Sélectionnez une région</option>
-  <optgroup label="France - Les Classiques">
-    <option value="Bordeaux">Bordeaux</option>
-    <option value="Bourgogne">Bourgogne</option>
-    <option value="Vallée du Rhône">Vallée du Rhône</option>
-    <option value="Champagne">Champagne</option>
-    <option value="Vallée de la Loire">Vallée de la Loire</option>
-    <option value="Alsace">Alsace</option>
-  </optgroup>
-  <optgroup label="France - Autres Régions">
-    <option value="Languedoc">Languedoc</option>
-    <option value="Roussillon">Roussillon</option>
-    <option value="Provence">Provence</option>
-    <option value="Sud-Ouest">Sud-Ouest</option>
-    <option value="Beaujolais">Beaujolais</option>
-    <option value="Jura">Jura</option>
-    <option value="Savoie">Savoie</option>
-    <option value="Corse">Corse</option>
-  </optgroup>
-  <optgroup label="Vins du Monde">
-    <option value="Italie">Italie</option>
-    <option value="Espagne">Espagne</option>
-    <option value="États-Unis">États-Unis</option>
-    <option value="Amérique du Sud">Amérique du Sud</option>
-    <option value="Australie/Nouvelle-Zélande">Australie / N-Zélande</option>
-    <option value="Autre pays">Autre pays</option>
-  </optgroup>
-</select>
-
-<input type="text" id="cepage" placeholder="Cépage(s) dominant(s) (ex: Pinot Noir, Merlot...)">
-
-<select id="format">
-  <option value="Bouteille (75cl)">Bouteille (75cl)</option>
-  <option value="Magnum (1.5L)">Magnum (1.5L)</option>
-  <option value="Demi (37.5cl)">Demi (37.5cl)</option>
-  <option value="Jéroboam (3L)">Jéroboam (3L) ou plus</option>
-</select>
-
-<input type="number" id="quantity" placeholder="Quantité en cave" required>
-
-<div style="display: flex; gap: 10px;">
-  <input type="number" id="apogee-debut" placeholder="Boire à partir de (ex: 2026)">
-  <input type="number" id="apogee-fin" placeholder="Jusqu'à (ex: 2035)">
-</div>
-
-<input type="text" id="commentaire" placeholder="Notes de dégustation ou localisation (ex: Étagère 3)">
-
-<button type="submit">Valider</button>
-      </form>
-    </section>
-    <div id="loader" style="display:none; text-align:center; font-size:18px; margin: 20px 0; color: #7b1e1e;">
-        ⏳ Mise à jour en cours...
+    <section class="toolbar">
+      <div class="dashboard-stats">
+        <h2 id="cellar-title">Ma Cave <span>(...)</span></h2>
       </div>
-      
-    <section class="list-section">
-      <h2>📋 Liste des Vins</h2>
-      <input type="text" id="search-bar" placeholder="🔍 Rechercher un vin..." style="margin-bottom: 10px;user-select: none; padding: 8px; width: 100%; max-width: 400px; border: 1px solid #ccc; border-radius: 5px;">
-      <table>
-        <thead>
-          <tr>
-            <th data-key="nom">Nom ⬍</th>
-            <th data-key="annee">Année ⬍</th>
-            <th data-key="quantite">Quantité ⬍</th>
-            <th data-key="region">Région ⬍</th>
-            <th data-key="commentaire">Commentaire ⬍</th>
-            <th>Actions</th>
-          </tr>
-        </thead>        
-        <tbody id="wine-table-body"></tbody>
-      </table>
+      <div class="actions">
+        <input type="text" id="search-bar" placeholder="🔍 Rechercher un domaine, une région...">
+        <button id="open-modal-btn" class="primary-btn">+ Ajouter un vin</button>
+      </div>
     </section>
+
+    <div id="loader" style="display:none; text-align:center; color: #C5A059; padding: 20px;">
+      ⏳ Dépoussiérage des bouteilles...
+    </div>
+      
+    <section id="wine-grid" class="wine-grid">
+      </section>
   </main>
 
-  <footer>
-    <p>© 2025 Épicuvin. L’abus d’alcool est dangereux pour la santé.</p>
-  </footer>
+  <div id="wine-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">Entrer un nouveau vin</h2>
+        <button id="close-modal-btn" class="close-btn">&times;</button>
+      </div>
+
+      <form id="wine-form">
+        <input type="hidden" id="wine-id">
+        
+        <div class="form-group">
+          <label>Identité du vin</label>
+          <input type="text" id="name" placeholder="Domaine / Château (ex: Château Margaux)" required>
+          <div class="input-row">
+            <select id="type" required>
+              <option value="">Type</option>
+              <option value="Rouge">Rouge</option>
+              <option value="Blanc">Blanc</option>
+              <option value="Rosé">Rosé</option>
+              <option value="Effervescent">Effervescent</option>
+              <option value="Liquoreux">Liquoreux</option>
+            </select>
+            <input type="number" id="year" placeholder="Millésime" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Origine</label>
+          <select id="region" required>
+            <option value="">Région</option>
+            <optgroup label="France">
+              <option value="Bordeaux">Bordeaux</option>
+              <option value="Bourgogne">Bourgogne</option>
+              <option value="Vallée du Rhône">Vallée du Rhône</option>
+              <option value="Champagne">Champagne</option>
+              <option value="Vallée de la Loire">Vallée de la Loire</option>
+              <option value="Alsace">Alsace</option>
+              <option value="Languedoc-Roussillon">Languedoc-Roussillon</option>
+              <option value="Provence">Provence</option>
+            </optgroup>
+            <optgroup label="Monde">
+              <option value="Italie">Italie</option>
+              <option value="Espagne">Espagne</option>
+              <option value="Nouveau Monde">Nouveau Monde</option>
+            </optgroup>
+          </select>
+          <input type="text" id="appellation" placeholder="Appellation (ex: Pauillac)">
+          <input type="text" id="cepage" placeholder="Cépage(s) dominant(s)">
+        </div>
+
+        <div class="form-group">
+          <label>Cave & Garde</label>
+          <div class="input-row">
+            <select id="format">
+              <option value="Bouteille (75cl)">Bouteille (75cl)</option>
+              <option value="Magnum (1.5L)">Magnum (1.5L)</option>
+            </select>
+            <input type="number" id="quantity" placeholder="Qté en cave" required>
+          </div>
+          <div class="input-row">
+            <input type="number" id="apogee-debut" placeholder="Boire dès (ex: 2026)">
+            <input type="number" id="apogee-fin" placeholder="Jusqu'à (ex: 2035)">
+          </div>
+          <input type="text" id="commentaire" placeholder="Notes de dégustation ou localisation...">
+        </div>
+
+        <button type="submit" class="submit-btn">Sauvegarder dans ma cave</button>
+      </form>
+    </div>
+  </div>
+
   <div id="toast" class="toast" style="display:none;"></div>
   <script type="module" src="script.js"></script>
 </body>
