@@ -237,3 +237,126 @@ tbody tr:hover { background-color: rgba(255, 255, 255, 0.02); }
     border-color: #8B1C31;
     color: #EAE0D5;
 }
+
+/* ========================================= */
+/* RESPONSIVE DESIGN (Tablettes & Mobiles) */
+/* ========================================= */
+
+/* --- TABLETTES (max-width: 1024px) --- */
+@media (max-width: 1024px) {
+    .container {
+        max-width: 95%;
+        padding: 30px;
+    }
+    header h1 {
+        font-size: 2rem;
+    }
+}
+
+/* --- SMARTPHONES (max-width: 768px) --- */
+@media (max-width: 768px) {
+    header {
+        padding: 40px 15px 25px;
+    }
+    header h1 {
+        font-size: 1.6rem;
+        letter-spacing: 2px;
+    }
+    header p {
+        font-size: 0.95rem;
+    }
+
+    /* Le bouton déconnexion passe sous le texte pour ne pas surcharger le haut */
+    #logout-btn {
+        position: relative;
+        top: 0;
+        right: 0;
+        display: inline-block;
+        margin-top: 20px;
+        padding: 8px 20px;
+    }
+
+    .container {
+        padding: 25px 15px;
+        margin-bottom: 30px;
+        border-radius: 12px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    /* Le formulaire passe sur une seule colonne */
+    form {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    input, select {
+        padding: 12px;
+    }
+
+    /* ========================================= */
+    /* TRANSFORMATION DU TABLEAU EN CARTES (MOBILE)*/
+    /* ========================================= */
+    
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    /* On cache visuellement l'en-tête du tableau */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    /* Chaque ligne devient une belle carte foncée avec reflet doré */
+    tbody tr {
+        background: rgba(10, 5, 5, 0.6);
+        border: 1px solid rgba(197, 160, 89, 0.2);
+        border-radius: 12px;
+        margin-bottom: 20px;
+        padding: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    }
+
+    /* Les cellules s'organisent en ligne (Label à gauche, Valeur à droite) */
+    td {
+        border: none;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 5px;
+        border-bottom: 1px solid rgba(234, 224, 213, 0.05);
+        font-size: 0.95rem;
+        text-align: right; /* La valeur du vin s'aligne à droite */
+    }
+
+    /* On retire la bordure du dernier élément (les boutons) */
+    td:last-child {
+        border-bottom: none;
+        justify-content: flex-end;
+        padding-top: 15px;
+    }
+
+    /* Création des "Labels" dorés à la volée grâce à l'attribut data-label */
+    td::before {
+        content: attr(data-label);
+        font-family: 'Montserrat', sans-serif;
+        color: #C5A059;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 500;
+        text-align: left;
+        padding-right: 15px;
+    }
+    
+    /* Boutons d'actions plus espacés pour les gros doigts sur tactile */
+    .edit-btn, .delete-btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+}

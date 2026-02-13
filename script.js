@@ -174,14 +174,14 @@ function renderTable() {
   filtered.forEach(wine => {
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td>${wine.nom}</td>
-      <td>${wine.annee}</td>
-      <td>${wine.quantite}</td>
-      <td>${wine.region}</td>
-      <td>${wine.commentaire || ""}</td>
-      <td>
+      <td data-label="Nom">${wine.nom}</td>
+      <td data-label="Année">${wine.annee}</td>
+      <td data-label="Quantité">${wine.quantite}</td>
+      <td data-label="Région">${wine.region}</td>
+      <td data-label="Commentaire">${wine.commentaire || "-"}</td>
+      <td data-label="Actions">
         <button class="edit-btn">Modifier</button>
-        <button class="delete-btn">Suppr.</button>
+        <button class="delete-btn">Supprimer</button>
       </td>
     `;
     
