@@ -1,0 +1,33 @@
+# Fichier : .github/workflows/tests.yml
+name: Tests Automatiques du Sommelier
+
+on:
+  push:
+    branches: [ main, master ] # Se lance quand vous poussez sur la branche principale
+
+jobs:
+  tester-application:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Récupérer le code
+      uses: actions/checkout@v4
+
+    - name: ⚙️ Installer NodeJS
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+
+    - name: 📦 Installer Playwright
+      run: npm init playwright@latest --yes --quiet -- --force
+
+    - name: 🌐 Lancer un petit serveur web pour tester les fichiers HTML
+      run: npm install -g serve
+
+    - name: 🤖 Lancer les tests Playwright
+      run: |
+        serve -l 3000 & 
+        npx playwright test
+      env:
+        PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000

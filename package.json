@@ -1,0 +1,23 @@
+{
+  "name": "epicuvin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MoUst4ki-tech/epicuvin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/MoUst4ki-tech/epicuvin/issues"
+  },
+  "homepage": "https://github.com/MoUst4ki-tech/epicuvin#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.2.3"
+  }
+}
