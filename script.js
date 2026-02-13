@@ -81,10 +81,9 @@ function showToast(message, isError = false) {
 function initRealTimeListener() {
   document.getElementById("loader").style.display = "block";
 
-  // On crée une requête pour ne récupérer que les vins de l'utilisateur connecté
-  const q = query(winesCollection, where("proprietaire", "==", loggedInUser));
+  // Correction ici : utiliser currentUser
+  const q = query(winesCollection, where("proprietaire", "==", currentUser));
 
-  // onSnapshot écoute la base de données en permanence
   onSnapshot(q, (snapshot) => {
     wineData = snapshot.docs.map(doc => ({
       id: doc.id,
@@ -92,7 +91,7 @@ function initRealTimeListener() {
     }));
     
     document.getElementById("loader").style.display = "none";
-    applySorting(); // Met à jour l'affichage dès qu'une donnée change
+    applySorting();
   }, (error) => {
     console.error("Erreur de récupération:", error);
     showToast("Erreur de connexion à la base de données", true);
@@ -106,14 +105,13 @@ form.addEventListener("submit", async (e) => {
 
   const id = document.getElementById("wine-id").value;
   
-  // Création de l'objet vin
   const wine = {
     nom: document.getElementById("name").value,
     annee: document.getElementById("year").value,
     quantite: document.getElementById("quantity").value,
     region: document.getElementById("region").value,
     commentaire: document.getElementById("commentaire").value,
-    proprietaire: loggedInUser, // Important : on lie le vin à "Antoine" ou "Marchal"
+    proprietaire: currentUser, // Correction ici : loggedInUser -> currentUser
     dateModification: new Date()
   };
 
@@ -254,8 +252,11 @@ document.getElementById("search-bar").addEventListener("input", (e) => {
 });
 
 document.getElementById("logout-btn").addEventListener("click", () => {
-  sessionStorage.removeItem("loggedInUser");
-  window.location.href = "index.html";
+  signOut(auth).then(() => {
+    window.location.href = "index.html";
+  }).catch((error) => {
+    console.error("Erreur déconnexion:", error);
+  });
 });
 
 // Lancement de l'application
