@@ -150,16 +150,33 @@
         font-size: 1.8rem;
       }
     }
+    .register-only {
+    display: none; /* Caché par défaut (mode connexion) */
+    }
+    .register-only.active {
+    display: block; /* Affiché en mode inscription */
+    }
   </style>
 </head>
 <body>
   <div class="login-box">
     <h2 id="form-title">Épicuvin</h2>
-    <form id="auth-form">
-      <input type="email" id="email" placeholder="Adresse e-mail" required autofocus />
-      <input type="password" id="password" placeholder="Mot de passe" required />
-      <button type="submit" id="submit-btn">Se connecter</button>
-    </form>
+<form id="auth-form">
+  <div class="register-only" id="register-fields">
+    <input type="text" id="prenom" placeholder="Prénom" />
+    <input type="text" id="nom" placeholder="Nom" />
+    <input type="tel" id="telephone" placeholder="Numéro de téléphone" />
+  </div>
+
+  <input type="email" id="email" placeholder="Adresse e-mail" required autofocus />
+  <input type="password" id="password" placeholder="Mot de passe" required />
+  
+  <div class="register-only" id="confirm-password-container">
+    <input type="password" id="confirm-password" placeholder="Confirmer le mot de passe" />
+  </div>
+
+  <button type="submit" id="submit-btn">Se connecter</button>
+</form>
     
     <div class="toggle-container">
       <a href="#" id="toggle-auth">Créer un compte privé</a>
@@ -170,65 +187,116 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { 
-    getAuth, 
-    signInWithEmailAndPassword, 
-    createUserWithEmailAndPassword 
-  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+// 1. On importe Firestore !
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAZQqueroo-GNWMVENm3c2-j0T8d7dpsjs",
-    authDomain: "epicuvin.firebaseapp.com",
-    projectId: "epicuvin",
-    storageBucket: "epicuvin.firebasestorage.app",
-    messagingSenderId: "57351192825",
-    appId: "1:57351192825:web:c3763a02b2cae468bd2228",
-    measurementId: "G-LN4MVN4DED"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyAZQqueroo-GNWMVENm3c2-j0T8d7dpsjs",
+  authDomain: "epicuvin.firebaseapp.com",
+  projectId: "epicuvin",
+  storageBucket: "epicuvin.firebasestorage.app",
+  messagingSenderId: "57351192825",
+  appId: "1:57351192825:web:c3763a02b2cae468bd2228",
+  measurementId: "G-LN4MVN4DED"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app); // On initialise la base de données
 
-  const authForm = document.getElementById('auth-form');
-  const toggleBtn = document.getElementById('toggle-auth');
-  const formTitle = document.getElementById('form-title');
-  const submitBtn = document.getElementById('submit-btn');
-  const errorMsg = document.getElementById('errorMsg');
+const authForm = document.getElementById('auth-form');
+const toggleBtn = document.getElementById('toggle-auth');
+const formTitle = document.getElementById('form-title');
+const submitBtn = document.getElementById('submit-btn');
+const errorMsg = document.getElementById('errorMsg');
 
-  let isLogin = true;
+// Récupération des nouveaux champs
+const registerFields = document.getElementById('register-fields');
+const confirmPasswordContainer = document.getElementById('confirm-password-container');
+const prenomInput = document.getElementById('prenom');
+const nomInput = document.getElementById('nom');
+const telephoneInput = document.getElementById('telephone');
+const confirmPasswordInput = document.getElementById('confirm-password');
 
-  toggleBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    isLogin = !isLogin;
-    
-    // Textes adaptés au style luxe
-    submitBtn.textContent = isLogin ? "Se connecter" : "Ouvrir ma cave";
-    toggleBtn.textContent = isLogin ? "Créer un compte privé" : "J'ai déjà une cave (Connexion)";
-  });
+let isLogin = true;
 
-  authForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+// 2. Gestion de l'affichage du formulaire
+toggleBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  isLogin = !isLogin;
+  
+  submitBtn.textContent = isLogin ? "Se connecter" : "Ouvrir ma cave";
+  toggleBtn.textContent = isLogin ? "Créer un compte privé" : "J'ai déjà une cave (Connexion)";
+  
+  // Afficher ou cacher les champs supplémentaires et gérer les champs obligatoires (required)
+  if (isLogin) {
+    registerFields.classList.remove('active');
+    confirmPasswordContainer.classList.remove('active');
+    prenomInput.required = false;
+    nomInput.required = false;
+    confirmPasswordInput.required = false;
+  } else {
+    registerFields.classList.add('active');
+    confirmPasswordContainer.classList.add('active');
+    prenomInput.required = true;
+    nomInput.required = true;
+    confirmPasswordInput.required = true;
+  }
+});
 
-    try {
-      if (isLogin) {
-        await signInWithEmailAndPassword(auth, email, password);
-      } else {
-        await createUserWithEmailAndPassword(auth, email, password);
-      }
+// 3. Soumission du formulaire
+authForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  errorMsg.style.display = 'none'; // On cache les erreurs précédentes
+  
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  try {
+    if (isLogin) {
+      // MODE CONNEXION
+      await signInWithEmailAndPassword(auth, email, password);
       window.location.href = 'cave.html';
-    } catch (error) {
-      // Nettoyage des erreurs Firebase pour un affichage plus propre
-      let msg = "Une erreur est survenue.";
-      if(error.code === 'auth/invalid-credential') msg = "Identifiants incorrects.";
-      if(error.code === 'auth/email-already-in-use') msg = "Cette adresse possède déjà une cave.";
-      if(error.code === 'auth/weak-password') msg = "Le mot de passe doit faire au moins 6 caractères.";
-      
-      errorMsg.textContent = msg;
-      errorMsg.style.display = 'block';
+    } else {
+      // MODE INSCRIPTION
+      const confirmPassword = confirmPasswordInput.value;
+      const prenom = prenomInput.value;
+      const nom = nomInput.value;
+      const telephone = telephoneInput.value;
+
+      // Vérification des mots de passe
+      if (password !== confirmPassword) {
+        throw new Error("passwords-dont-match");
+      }
+
+      // Création du compte dans Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Sauvegarde des informations dans la collection "users" de Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        prenom: prenom,
+        nom: nom,
+        telephone: telephone,
+        email: email,
+        dateInscription: new Date()
+      });
+
+      // Redirection vers la cave une fois tout terminé
+      window.location.href = 'cave.html';
     }
-  });
+  } catch (error) {
+    let msg = "Une erreur est survenue.";
+    if(error.message === "passwords-dont-match") msg = "Les mots de passe ne correspondent pas.";
+    if(error.code === 'auth/invalid-credential') msg = "Identifiants incorrects.";
+    if(error.code === 'auth/email-already-in-use') msg = "Cette adresse possède déjà une cave.";
+    if(error.code === 'auth/weak-password') msg = "Le mot de passe doit faire au moins 6 caractères.";
+    
+    errorMsg.textContent = msg;
+    errorMsg.style.display = 'block';
+  }
+});
 </script>
 </body>
 </html>
