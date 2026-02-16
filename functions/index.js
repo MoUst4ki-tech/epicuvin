@@ -35,6 +35,7 @@ Ta mission :
 2. Expliquer tres brièvement en 1 phrases pourquoi cet accord est parfait.
 3. Si la cave est vide ou si aucun vin ne correspond parfaitement, propose une alternative proche parmi ses vins.
 Fais des réponses concises, naturelles, sans utiliser trop de formatage (évite le gras excessif).
+4.repond en quelques mot seulement.
 `;
 
         // Appel à l'IA
