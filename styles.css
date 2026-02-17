@@ -622,6 +622,11 @@ input:focus, select:focus {
 
 /* Carte de l'historique */
 .history-card { opacity: 0.9; }
-.history-date { font-size: 0.75rem; color: #887C70; margin-bottom: 10px;}
+.history-date { font-size: 0.85rem; color: #887C70; }
 .history-stars { color: #C5A059; font-size: 1.2rem; margin-bottom: 10px;}
 .history-comment { font-size: 0.9rem; font-style: italic; color: #EAE0D5; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px;}
+
+.history-card { 
+    opacity: 0.9; 
+    justify-content: flex-start; /* Empêche le contenu de s'étirer bizarrement */
+}

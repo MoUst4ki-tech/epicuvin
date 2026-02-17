@@ -55,11 +55,14 @@ let currentWineForDegustation = null;
 // ==========================================
 // GESTION DES ONGLETS (Cave vs Historique)
 // ==========================================
+const actionsToolbar = document.querySelector(".actions"); // Récupère le bloc avec la recherche et le bouton
+
 tabCave.addEventListener("click", () => {
   tabCave.classList.add("active");
   tabHistory.classList.remove("active");
   wineGrid.style.display = "grid";
   historyGrid.style.display = "none";
+  actionsToolbar.style.display = "flex"; // On réaffiche les boutons
 });
 
 tabHistory.addEventListener("click", () => {
@@ -67,6 +70,7 @@ tabHistory.addEventListener("click", () => {
   tabCave.classList.remove("active");
   wineGrid.style.display = "none";
   historyGrid.style.display = "grid";
+  actionsToolbar.style.display = "none"; // On cache les boutons
 });
 
 // ==========================================
