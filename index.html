@@ -277,6 +277,7 @@ authForm.addEventListener('submit', async (e) => {
       window.location.href = 'cave.html';
     }
   } catch (error) {
+    console.error("Détail de l'erreur Firebase :", error);
     let msg = "Une erreur est survenue.";
     if(error.message === "passwords-dont-match") msg = "Les mots de passe ne correspondent pas.";
     if(error.code === 'auth/invalid-credential') msg = "Identifiants incorrects.";
