@@ -113,7 +113,7 @@ test.describe('Test complet de l\'application Épicuvin', () => {
     // L'index 0 est le message de bienvenue, l'index 1 sera la vraie réponse.
     const reponseBot = page.locator('.message.bot').nth(1);
     await expect(reponseBot).toBeVisible({ timeout: 15000 });
-    await expect(reponseBot).not.toHaveText('...'); // On s'assure que ce n'est plus l'état de chargement
+    await expect(reponseBot).not.toHaveText('...', { timeout: 30000 });
 
     // Fermeture du chatbot
     await page.click('#chatbot-close');

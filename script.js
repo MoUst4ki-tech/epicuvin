@@ -4,7 +4,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
 import { 
-  getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc, query, where, getDoc 
+  getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc, query, where, getDoc, setDoc
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { 
   getAuth, onAuthStateChanged, signOut 
@@ -325,9 +325,9 @@ profileForm.addEventListener("submit", async (e) => {
   loader.style.display = "block";
   profileModal.classList.remove("active");
 
-  try {
-    // Met à jour uniquement les champs envoyés sans écraser le reste
-    await updateDoc(doc(db, "users", currentUserId), updatedData);
+try {
+    // Remplacez l'ancienne ligne updateDoc par celle-ci :
+    await setDoc(doc(db, "users", currentUserId), updatedData, { merge: true });
     showToast("Profil mis à jour avec succès");
   } catch (error) {
     console.error("Erreur mise à jour profil:", error);
