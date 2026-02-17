@@ -244,12 +244,12 @@ function renderGrid() {
         <button class="edit-btn">Modifier</button>
         <button class="delete-btn">Retirer</button>
       </div>
-      card.querySelector(".taste-btn").addEventListener("click", () => openDegustation(wine));
-    card.querySelector(".edit-btn").addEventListener("click", () => editWine(wine));
-    card.querySelector(".delete-btn").addEventListener("click", () => deleteWine(wine.id));
     `;
     
     // Attachement des événements (Modifier / Retirer)
+    card.querySelector(".edit-btn").addEventListener("click", () => editWine(wine));
+    card.querySelector(".delete-btn").addEventListener("click", () => deleteWine(wine.id));
+    card.querySelector(".taste-btn").addEventListener("click", () => openDegustation(wine));
     card.querySelector(".edit-btn").addEventListener("click", () => editWine(wine));
     card.querySelector(".delete-btn").addEventListener("click", () => deleteWine(wine.id));
 
