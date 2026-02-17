@@ -21,6 +21,12 @@
 
   <main class="container fade-in">
     <section class="toolbar">
+      <div class="tabs-container fade-in">
+      <button id="tab-cave" class="tab-btn active">Ma Cave</button>
+      <button id="tab-history" class="tab-btn">Livre de Cave</button>
+    </div>
+
+    <section id="history-grid" class="wine-grid" style="display: none;"></section>
       <div class="dashboard-stats">
         <h2 id="cellar-title">Ma Cave <span>(...)</span></h2>
       </div>
@@ -123,6 +129,41 @@
         </div>
 
         <button type="submit" class="submit-btn">Sauvegarder dans ma cave</button>
+      </form>
+    </div>
+  </div>
+  <div id="degustation-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="degustation-title">Déguster ce vin</h2>
+        <button id="close-degustation-btn" class="close-btn">&times;</button>
+      </div>
+
+      <form id="degustation-form">
+        <input type="hidden" id="degustation-wine-id">
+        
+        <div class="form-group">
+          <label>Combien de bouteilles ouvertes ?</label>
+          <input type="number" id="degustation-qty" min="1" value="1" required>
+        </div>
+
+        <div class="form-group">
+          <label>Votre Note</label>
+          <div class="star-rating">
+            <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 étoiles">★</label>
+            <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 étoiles">★</label>
+            <input type="radio" id="star3" name="rating" value="3" checked /><label for="star3" title="3 étoiles">★</label>
+            <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 étoiles">★</label>
+            <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 étoile">★</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Souvenirs & Commentaires</label>
+          <input type="text" id="degustation-comment" placeholder="Arômes, avec quel plat, avec qui..." required>
+        </div>
+
+        <button type="submit" class="submit-btn">Ajouter au Livre de Cave</button>
       </form>
     </div>
   </div>

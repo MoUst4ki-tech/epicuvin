@@ -28,6 +28,8 @@ const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const winesCollection = collection(db, "vins");
+const degustationsCollection = collection(db, "degustations");
+let degustationData = [];
 
 // ==========================================
 // 3. VARIABLES GLOBALES & ÉLÉMENTS DOM
@@ -43,6 +45,29 @@ const form = document.getElementById("wine-form");
 const wineGrid = document.getElementById("wine-grid");
 const modal = document.getElementById("wine-modal");
 const loader = document.getElementById("loader");
+const tabCave = document.getElementById("tab-cave");
+const tabHistory = document.getElementById("tab-history");
+const historyGrid = document.getElementById("history-grid");
+const degustationModal = document.getElementById("degustation-modal");
+const degustationForm = document.getElementById("degustation-form");
+let currentWineForDegustation = null;
+
+// ==========================================
+// GESTION DES ONGLETS (Cave vs Historique)
+// ==========================================
+tabCave.addEventListener("click", () => {
+  tabCave.classList.add("active");
+  tabHistory.classList.remove("active");
+  wineGrid.style.display = "grid";
+  historyGrid.style.display = "none";
+});
+
+tabHistory.addEventListener("click", () => {
+  tabHistory.classList.add("active");
+  tabCave.classList.remove("active");
+  wineGrid.style.display = "none";
+  historyGrid.style.display = "grid";
+});
 
 // ==========================================
 // 4. AUTHENTIFICATION & DÉCONNEXION
@@ -105,23 +130,22 @@ function showToast(message, isError = false) {
 function initRealTimeListener() {
   loader.style.display = "block";
 
-  const q = query(winesCollection, where("proprietaire", "==", currentUser));
-
-  onSnapshot(q, (snapshot) => {
-    wineData = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-    
-    // Tri alphabétique par défaut sur le nom du vin
+  // Écoute de la Cave
+  const qVins = query(winesCollection, where("proprietaire", "==", currentUser));
+  onSnapshot(qVins, (snapshot) => {
+    wineData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     wineData.sort((a, b) => a.nom.localeCompare(b.nom));
-    
     loader.style.display = "none";
     renderGrid();
-  }, (error) => {
-    console.error("Erreur de récupération:", error);
-    showToast("Erreur de connexion à la cave", true);
-    loader.style.display = "none";
+  });
+
+  // Écoute de l'Historique de Dégustation
+  const qDegust = query(degustationsCollection, where("proprietaire", "==", currentUser));
+  onSnapshot(qDegust, (snapshot) => {
+    degustationData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    // Trier du plus récent au plus ancien
+    degustationData.sort((a, b) => b.dateDegustation.toMillis() - a.dateDegustation.toMillis());
+    renderHistory();
   });
 }
 
@@ -216,9 +240,13 @@ function renderGrid() {
         ${wine.apogeeDebut ? `<p class="apogee">⏳ Garde : ${wine.apogeeDebut} - ${wine.apogeeFin || '...'}</p>` : ''}
       </div>
       <div class="card-actions">
+        <button class="taste-btn">Déguster</button>
         <button class="edit-btn">Modifier</button>
         <button class="delete-btn">Retirer</button>
       </div>
+      card.querySelector(".taste-btn").addEventListener("click", () => openDegustation(wine));
+    card.querySelector(".edit-btn").addEventListener("click", () => editWine(wine));
+    card.querySelector(".delete-btn").addEventListener("click", () => deleteWine(wine.id));
     `;
     
     // Attachement des événements (Modifier / Retirer)
@@ -339,7 +367,105 @@ try {
 });
 
 // ==========================================
-// 13. LE SOMMELIER VIRTUEL (IA)
+// 13. LIVRE DE CAVE : LOGIQUE DÉGUSTATION
+// ==========================================
+function openDegustation(wine) {
+  currentWineForDegustation = wine;
+  document.getElementById("degustation-title").textContent = `Déguster : ${wine.nom}`;
+  document.getElementById("degustation-qty").max = wine.quantite; // Maximum = stock actuel
+  document.getElementById("degustation-qty").value = 1;
+  document.getElementById("degustation-comment").value = "";
+  degustationModal.classList.add("active");
+}
+
+document.getElementById("close-degustation-btn").addEventListener("click", () => {
+  degustationModal.classList.remove("active");
+});
+
+degustationForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const qtyBue = parseInt(document.getElementById("degustation-qty").value);
+  const comment = document.getElementById("degustation-comment").value;
+  const rating = parseInt(document.querySelector('input[name="rating"]:checked').value);
+
+  if(qtyBue > currentWineForDegustation.quantite) {
+    showToast("Vous n'avez pas autant de bouteilles en cave !", true);
+    return;
+  }
+
+  loader.style.display = "block";
+  degustationModal.classList.remove("active");
+
+  try {
+    // 1. Créer l'archive dans l'historique
+    await addDoc(degustationsCollection, {
+      wineId: currentWineForDegustation.id,
+      nom: currentWineForDegustation.nom,
+      annee: currentWineForDegustation.annee || "NV",
+      region: currentWineForDegustation.region || "Inconnue",
+      type: currentWineForDegustation.type || "Inconnu",
+      quantiteBue: qtyBue,
+      note: rating,
+      commentaire: comment,
+      proprietaire: currentUser,
+      dateDegustation: new Date()
+    });
+
+    // 2. Déduire de la cave
+    const remainingQty = currentWineForDegustation.quantite - qtyBue;
+    if (remainingQty <= 0) {
+      await deleteDoc(doc(db, "vins", currentWineForDegustation.id));
+      showToast("Bouteille terminée ! Vin retiré de la cave.");
+    } else {
+      await updateDoc(doc(db, "vins", currentWineForDegustation.id), { quantite: remainingQty });
+      showToast(`Dégustation notée. Reste ${remainingQty} bouteille(s).`);
+    }
+  } catch (error) {
+    console.error("Erreur dégustation:", error);
+    showToast("Erreur lors de l'enregistrement", true);
+  } finally {
+    loader.style.display = "none";
+  }
+});
+
+function renderHistory() {
+  historyGrid.innerHTML = "";
+  
+  if (degustationData.length === 0) {
+    historyGrid.innerHTML = "<p style='color:#A89B8C; grid-column: 1 / -1; text-align: center;'>Votre livre de cave est vide. Ouvrez une bouteille !</p>";
+    return;
+  }
+
+  degustationData.forEach(degust => {
+    // Transformer la note (ex: 4) en étoiles dorées et vides
+    const stars = "★".repeat(degust.note) + "☆".repeat(5 - degust.note);
+    const dateStr = degust.dateDegustation.toDate().toLocaleDateString('fr-FR');
+
+    const card = document.createElement("div");
+    card.className = "wine-card history-card";
+    
+    card.innerHTML = `
+      <div class="card-header">
+        <span class="history-date">📅 Dégusté le ${dateStr}</span>
+        <span class="wine-year">${degust.annee}</span>
+      </div>
+      <div class="card-body">
+        <h3>${degust.nom}</h3>
+        <p class="appellation">${degust.region}</p>
+        <div class="history-stars" title="${degust.note}/5">${stars}</div>
+        <div class="history-comment">"${degust.commentaire}"</div>
+        <p style="margin-top:10px; font-size: 0.8rem; color:#A89B8C;">
+          🍷 ${degust.quantiteBue} bouteille(s) ouverte(s)
+        </p>
+      </div>
+    `;
+    historyGrid.appendChild(card);
+  });
+}
+
+// ==========================================
+// 14. LE SOMMELIER VIRTUEL (IA)
 // ==========================================
 const chatbotToggle = document.getElementById("chatbot-toggle");
 const chatbotWindow = document.getElementById("chatbot-window");
