@@ -9,7 +9,9 @@
 </head>
 <body>
 
-  <header>
+<header>
+    <button id="profile-btn">Mon Profil</button>
+    
     <div class="header-content">
       <h1>Épicuvin</h1>
       <p>Votre Sommelier Personnel</p>
@@ -35,7 +37,25 @@
     <section id="wine-grid" class="wine-grid">
       </section>
   </main>
+<div id="profile-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="profile-title">Mon Profil</h2>
+        <button id="close-profile-btn" class="close-btn">&times;</button>
+      </div>
 
+      <form id="profile-form">
+        <div class="form-group">
+          <label>Informations Personnelles</label>
+          <input type="text" id="profile-prenom" placeholder="Prénom" required>
+          <input type="text" id="profile-nom" placeholder="Nom" required>
+          <input type="tel" id="profile-telephone" placeholder="Numéro de téléphone">
+          <input type="email" id="profile-email" placeholder="Adresse e-mail" disabled style="opacity: 0.6; cursor: not-allowed;">
+        </div>
+        <button type="submit" class="submit-btn">Mettre à jour</button>
+      </form>
+    </div>
+  </div>
   <div id="wine-modal" class="modal-overlay">
     <div class="modal-content">
       <div class="modal-header">

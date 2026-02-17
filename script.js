@@ -4,7 +4,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
 import { 
-  getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc, query, where 
+  getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc, query, where, getDoc 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { 
   getAuth, onAuthStateChanged, signOut 
@@ -35,7 +35,10 @@ const winesCollection = collection(db, "vins");
 let wineData = [];
 let currentSearch = "";
 let currentUser = null;
+let currentUserId = null;
 
+const profileModal = document.getElementById("profile-modal");
+const profileForm = document.getElementById("profile-form");
 const form = document.getElementById("wine-form");
 const wineGrid = document.getElementById("wine-grid");
 const modal = document.getElementById("wine-modal");
@@ -47,7 +50,9 @@ const loader = document.getElementById("loader");
 onAuthStateChanged(auth, (user) => {
   if (user) {
     currentUser = user.email; 
+    currentUserId = user.uid;
     initRealTimeListener();
+    loadUserProfile();
   } else {
     window.location.href = "index.html";
   }
@@ -274,7 +279,67 @@ document.getElementById("search-bar").addEventListener("input", (e) => {
 });
 
 // ==========================================
-// 12. LE SOMMELIER VIRTUEL (IA)
+// 12. GESTION DU PROFIL UTILISATEUR
+// ==========================================
+document.getElementById("profile-btn").addEventListener("click", () => {
+  profileModal.classList.add("active");
+});
+
+document.getElementById("close-profile-btn").addEventListener("click", () => {
+  profileModal.classList.remove("active");
+});
+
+profileModal.addEventListener("click", (e) => {
+  if (e.target === profileModal) profileModal.classList.remove("active");
+});
+
+// Récupérer les données depuis Firebase
+async function loadUserProfile() {
+  if (!currentUserId) return;
+  try {
+    const userDoc = await getDoc(doc(db, "users", currentUserId));
+    if (userDoc.exists()) {
+      const data = userDoc.data();
+      document.getElementById("profile-prenom").value = data.prenom || "";
+      document.getElementById("profile-nom").value = data.nom || "";
+      document.getElementById("profile-telephone").value = data.telephone || "";
+      document.getElementById("profile-email").value = data.email || currentUser;
+    } else {
+      document.getElementById("profile-email").value = currentUser;
+    }
+  } catch (error) {
+    console.error("Erreur chargement profil:", error);
+  }
+}
+
+// Mettre à jour les données dans Firebase
+profileForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const updatedData = {
+    prenom: document.getElementById("profile-prenom").value,
+    nom: document.getElementById("profile-nom").value,
+    telephone: document.getElementById("profile-telephone").value,
+  };
+
+  loader.style.display = "block";
+  profileModal.classList.remove("active");
+
+  try {
+    // Met à jour uniquement les champs envoyés sans écraser le reste
+    await updateDoc(doc(db, "users", currentUserId), updatedData);
+    showToast("Profil mis à jour avec succès");
+  } catch (error) {
+    console.error("Erreur mise à jour profil:", error);
+    showToast("Erreur lors de la mise à jour", true);
+    profileModal.classList.add("active");
+  } finally {
+    loader.style.display = "none";
+  }
+});
+
+// ==========================================
+// 13. LE SOMMELIER VIRTUEL (IA)
 // ==========================================
 const chatbotToggle = document.getElementById("chatbot-toggle");
 const chatbotWindow = document.getElementById("chatbot-window");
