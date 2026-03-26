@@ -73,18 +73,17 @@ header p {
 /* ========================================= */
 .toolbar {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row; 
+    justify-content: center;
     align-items: center;
     margin-bottom: 40px;
-    flex-wrap: wrap;
     gap: 20px;
+    width: 100%;
 }
 
 #cellar-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
-    color: #EAE0D5;
     margin: 0;
+    line-height: 1;
 }
 
 #cellar-title span {
@@ -97,20 +96,16 @@ header p {
 
 .actions {
     display: flex;
-    gap: 15px;
+    flex-direction: row;
     align-items: center;
-    flex-wrap: wrap;
+    gap: 15px;
+    margin: 0;
 }
 
 #search-bar {
-    padding: 12px 20px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(197, 160, 89, 0.2);
-    border-radius: 6px;
-    color: #EAE0D5;
-    font-family: 'Montserrat', sans-serif;
-    width: 250px;
-    transition: all 0.3s;
+    margin: 0; 
+    box-sizing: border-box;
+    height: 48px;
 }
 
 #search-bar:focus {
@@ -565,9 +560,10 @@ input:focus, select:focus {
 .tabs-container {
     display: flex;
     gap: 15px;
-    margin-bottom: 25px;
-    border-bottom: 1px solid rgba(197, 160, 89, 0.15);
-    padding-bottom: 15px;
+    align-items: center;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
 }
 
 .tab-btn {
