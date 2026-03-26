@@ -103,9 +103,15 @@ header p {
 }
 
 #search-bar {
-    margin: 0; 
-    box-sizing: border-box;
-    height: 48px;
+    padding: 12px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(197, 160, 89, 0.2);
+    border-radius: 6px;
+    color: #EAE0D5;
+    font-family: 'Montserrat', sans-serif;
+    width: 250px;
+    transition: all 0.3s;
+    margin: 0;
 }
 
 #search-bar:focus {
